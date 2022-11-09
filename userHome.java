@@ -17,12 +17,31 @@ public class userHome {
         upperPanel.setBounds(20, 20, 560, 200);
         lowerPanel.setBounds(0, 0, 560, 90);
 
-
-        // Box upperButtons = Box.createHorizontalBox();
+        // new study set
         JButton newStudySet = new JButton("Create New Study Set");
+
+        // browsing
         JButton browseOwn = new JButton("Browse Your Own Study Sets");
+        browseOwn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.removeAll();
+                frame.repaint();
+                frame.revalidate();
+                Browse bO = new Browse(frame, username, "Own");
+                bO.Display();
+            }
+        });
         JButton browse = new JButton("Browse Other Study Sets");
-        // Box lowerButtons = Box.createHorizontalBox();
+        browse.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.removeAll();
+                frame.repaint();
+                frame.revalidate();
+                Browse bO = new Browse(frame, username, "Other");
+                bO.Display();
+            }
+        });
+
         // logout
         JButton logout = new JButton("Logout");
         logout.addActionListener(new ActionListener() {
