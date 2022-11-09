@@ -19,14 +19,25 @@ public class userHome {
 
         // new study set
         JButton newStudySet = new JButton("Create New Study Set");
+        newStudySet.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // frame.removeAll();
+                // frame.repaint();
+                frame.remove(upperPanel);
+                frame.remove(lowerPanel);
+                CreateSet cs = new CreateSet(frame, username);
+                cs.Display();   
+            }
+        });
 
         // browsing
         JButton browseOwn = new JButton("Browse Your Own Study Sets");
         browseOwn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.removeAll();
-                frame.repaint();
-                frame.revalidate();
+                // frame.removeAll();
+                // frame.repaint();
+                frame.remove(upperPanel);
+                frame.remove(lowerPanel);
                 Browse bO = new Browse(frame, username, "Own");
                 bO.Display();
             }
@@ -34,9 +45,10 @@ public class userHome {
         JButton browse = new JButton("Browse Other Study Sets");
         browse.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.removeAll();
-                frame.repaint();
-                frame.revalidate();
+                // frame.removeAll();
+                // frame.repaint();
+                frame.remove(upperPanel);
+                frame.remove(lowerPanel);
                 Browse bO = new Browse(frame, username, "Other");
                 bO.Display();
             }
@@ -47,8 +59,10 @@ public class userHome {
         logout.addActionListener(new ActionListener() {
             // check user info user info
             public void actionPerformed(ActionEvent e) {
-                frame.removeAll();
-                frame.repaint();
+                // frame.removeAll();
+                // frame.repaint();
+                frame.remove(upperPanel);
+                frame.remove(lowerPanel);
                 FlashStash lo = new FlashStash();
                 lo.LogIn();
             }

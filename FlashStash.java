@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.sql.PreparedStatement;
-import java.util.concurrent.TimeUnit;
 
 public class FlashStash {
     JFrame frame;
