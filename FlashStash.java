@@ -82,7 +82,7 @@ public class FlashStash {
 
     }
     // get connection
-    private Connection getConnection() {
+    public Connection getConnection() {
         String[] connection = getUrl(); 
         // connect to database
         try {
@@ -98,7 +98,7 @@ public class FlashStash {
     } 
 
     // get url
-    private String[] getUrl() {
+    public String[] getUrl() {
             String hst, usr, pwd, dab, url;
             String result[] = new String[5];
             try {

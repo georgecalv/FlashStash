@@ -3,7 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.*;
 
-public class userHome {
+public class userHome extends FlashStash{
     JFrame frame;
     String username;
     public userHome(JFrame frame, String username) {

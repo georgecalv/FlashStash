@@ -9,8 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.*;
 
-public class Browse {
+
+public class Browse extends FlashStash {
     JFrame frame;
     String type;
     String username;
@@ -31,14 +34,35 @@ public class Browse {
         String q = "";
         switch(this.type) {
             case "Own":
-                q = "SELECT * FROM StudySet WHERE username = ?";
+                q = "SELECT username, set_name, set_subject FROM StudySet WHERE username = ?";
                 break;
             case "Other":
-                q = "SELECT * FROM StudySet WHERE username != ?";
+                q = "SELECT username, set_name, set_subject FROM StudySet WHERE username != ?";
                 break;  
         }
-        JLabel title = new JLabel("Browse");
-        leftPanel.add(title);
+        try {
+            JLabel title = new JLabel("Browse " + this.type + " Sets:");
+            leftPanel.add(title);
+            Vector<String> columnNames = new Vector<String>(Arrays.asList("User", "Set Name", "Subject"));
+            Vector<Vector<String>> data = new Vector<Vector<String>>();
+            Connection cn = super.getConnection();
+            PreparedStatement st = cn.prepareStatement(q);
+            st.setString(1, this.username);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                while(rs.next()) {
+                    data.add(new Vector<String>(Arrays.asList(rs.getString("user"), rs.getString("set_name"), rs.getString("set_subject"))));
+                }
+            }
+            JTable table  = new JTable(data, columnNames);
+            JScrollPane scrollPane = new JScrollPane(table);
+            table.setFillsViewportHeight(true);
+            leftPanel.add(scrollPane);
+        }
+        catch(SQLException e) {
+            e.getStackTrace();
+            System.out.println("Prepared Statement Error");
+        }
         leftPanel.repaint();
         leftPanel.revalidate();
         this.frame.add(leftPanel);
