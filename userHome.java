@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.*;
 
 public class userHome {
     JFrame frame;
@@ -22,7 +23,17 @@ public class userHome {
         JButton browseOwn = new JButton("Browse Your Own Study Sets");
         JButton browse = new JButton("Browse Other Study Sets");
         // Box lowerButtons = Box.createHorizontalBox();
+        // logout
         JButton logout = new JButton("Logout");
+        logout.addActionListener(new ActionListener() {
+            // check user info user info
+            public void actionPerformed(ActionEvent e) {
+                frame.removeAll();
+                frame.repaint();
+                FlashStash lo = new FlashStash();
+                lo.LogIn();
+            }
+        });
 
         // lowerButtons.add(logout);
         upperPanel.add(newStudySet);
