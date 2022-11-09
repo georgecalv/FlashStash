@@ -68,7 +68,6 @@ public class userHome {
             }
         });
 
-        // lowerButtons.add(logout);
         upperPanel.add(newStudySet);
         upperPanel.add(browseOwn);
         upperPanel.add(browse);

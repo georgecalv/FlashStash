@@ -41,3 +41,13 @@ CREATE TABLE Reviews (
 
 -- populating table
 INSERT INTO User VALUES("gcalvert", "1234", "George", "Calvert");
+INSERT INTO User VALUES("jSmith", "4321", "John", "Smith");
+INSERT INTO Subjects VALUES("MA", "Math"),
+                    ("SC", "Science"),
+                    ("LI", "Literature"),
+                    ("LA", "Language");
+INSERT INTO StudySet VALUES(1, "gcalvert", "Database", "SC");
+INSERT INTO StudySet VALUES(2, "jSmith", "Biology Sem1 Final", "SC");
+
+
+
