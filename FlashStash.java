@@ -156,6 +156,9 @@ public class FlashStash {
                         return true;
                     }
                 }
+                rs.close();
+                st.close();
+                this.cn.close();
                 return false;
             }
             // is ot a user

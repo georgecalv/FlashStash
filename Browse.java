@@ -41,27 +41,27 @@ public class Browse extends FlashStash {
                 break;  
         }
         try {
-            JLabel title = new JLabel("Browse " + this.type + " Sets:");
-            leftPanel.add(title);
+            // JLabel title = new JLabel("Browse " + this.type + " Sets:");
+            // leftPanel.add(title);
             Vector<String> columnNames = new Vector<String>(Arrays.asList("User", "Set Name", "Subject"));
             Vector<Vector<String>> data = new Vector<Vector<String>>();
             Connection cn = super.getConnection();
             PreparedStatement st = cn.prepareStatement(q);
             st.setString(1, this.username);
             ResultSet rs = st.executeQuery();
-            if(rs.next()) {
-                while(rs.next()) {
-                    data.add(new Vector<String>(Arrays.asList(rs.getString("user"), rs.getString("set_name"), rs.getString("set_subject"))));
-                }
+            while(rs.next()) {
+                data.add(new Vector<String>(Arrays.asList(rs.getString("username"), rs.getString("set_name"), rs.getString("set_subject"))));
             }
+            rs.close();
+            st.close();
+            cn.close();
             JTable table  = new JTable(data, columnNames);
             JScrollPane scrollPane = new JScrollPane(table);
             table.setFillsViewportHeight(true);
             leftPanel.add(scrollPane);
         }
         catch(SQLException e) {
-            e.getStackTrace();
-            System.out.println("Prepared Statement Error");
+            e.printStackTrace();
         }
         leftPanel.repaint();
         leftPanel.revalidate();

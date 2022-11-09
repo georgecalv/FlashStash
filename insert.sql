@@ -46,8 +46,24 @@ INSERT INTO Subjects VALUES("MA", "Math"),
                     ("SC", "Science"),
                     ("LI", "Literature"),
                     ("LA", "Language");
-INSERT INTO StudySet VALUES(1, "gcalvert", "Database", "SC");
-INSERT INTO StudySet VALUES(2, "jSmith", "Biology Sem1 Final", "SC");
+INSERT INTO StudySet VALUES(1, "gcalvert", "Database", "SC"),
+                            (2, "jSmith", "BiologySem1 Final", "SC"),
+                            (3, "gcalvert", "Math 231", "MA"),
+                            (4, "jSmith", "French1", "LA"),
+                            (5, "jSmith", "To kill a mocking bird", "LI"),
+                            (6, "jSmith", "The Giver", "LI"),
+                            (7, "jSmith", "MidsummerNights", "LI"),
+                            (8, "jSmith", "Magpie Murders", "LI"),
+                            (9, "gcalvert", "Discrete", "SC"),
+                            (10, "gcalvert", "Software", "SC"),
+                            (11, "gcalvert", "Algorithms", "SC"),
+                            (12, "gcalvert", "Comm101", "LA"),
+                            (13, "gcalvert", "CPSC121", "SC"),
+                            (14, "gcalvert", "CPSC122", "SC"),
+                            (15, "gcalvert", "PHYS101", "LA"),
+                            (16, "gcalvert", "MATH259", "SC");
+
+
 
 
 
