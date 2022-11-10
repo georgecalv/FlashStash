@@ -1,11 +1,15 @@
 -- table creation
 DROP TABLE IF EXISTS Reviews;
+DROP TABLE IF EXISTS Saves;
+DROP TABLE IF EXISTS Likes;
+DROP TABLE IF EXISTS Content;
 DROP TABLE IF EXISTS StudySet;
 DROP TABLE IF EXISTS Subjects; 
 DROP TABLE IF EXISTS User;
+
 -- DROP TABLE IF EXISTS 
 
-CREATE TABLE User(
+CREATE TABLE User (
     username CHAR(20),
     pass CHAR(20) NOT NULL,
     fname TINYTEXT NOT NULL,
@@ -19,25 +23,39 @@ CREATE TABLE Subjects (
 );
 CREATE TABLE StudySet (
     set_id INT UNSIGNED AUTO_INCREMENT,
-    username CHAR(20),
+    created_by CHAR(20),
     set_name TINYTEXT NOT NULL,
     set_subject CHAR(2) NOT NULL,
-    PRIMARY KEY(set_id, username),
-    FOREIGN KEY(username) REFERENCES User(username),
+    PRIMARY KEY(set_id),
+    FOREIGN KEY(created_by) REFERENCES User(username),
     FOREIGN KEY(set_subject) REFERENCES Subjects(subject_code)
 );
-CREATE TABLE Reviews (
-    review_id INT UNSIGNED AUTO_INCREMENT,
-    set_id INT NOT NULL,
-    username CHAR(20) NOT NULL,
-    created_user CHAR(20) NOT NULL,
-    review INT UNSIGNED NOT NULL,
-    PRIMARY KEY(review_id),
+CREATE TABLE Saves (
+    set_id INT UNSIGNED,
+    username CHAR(20),
+    FOREIGN KEY(set_id) REFERENCES StudySet(set_id),
     FOREIGN KEY(username) REFERENCES User(username),
-    FOREIGN KEY(created_user) REFERENCES StudySet(username),
-    CHECK(username != created_user),
-    CHECK(review <= 5)
+    PRIMARY KEY(set_id, username)
 );
+CREATE TABLE Likes (
+    set_id INT UNSIGNED,
+    username CHAR(20),
+    FOREIGN KEY(set_id) REFERENCES StudySet(set_id),
+    FOREIGN KEY(username) REFERENCES User(username),
+    PRIMARY KEY(set_id, username)
+);
+CREATE TABLE Content (
+    question_id INT UNSIGNED AUTO_INCREMENT,
+    question TINYTEXT NOT NULL,
+    answer TINYTEXT NOT NULL,
+    username CHAR(20),
+    study_set INT UNSIGNED,
+    FOREIGN KEY(username) REFERENCES User(username),
+    FOREIGN KEY(study_set) REFERENCES StudySet(set_id),
+    PRIMARY KEY(question_id)
+);
+
+
 
 -- populating table
 INSERT INTO User VALUES("gcalvert", "1234", "George", "Calvert");

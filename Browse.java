@@ -40,17 +40,17 @@ public class Browse extends FlashStash {
 
         switch(this.type) {
             case "Own":
-                q = "SELECT username, set_name, set_subject FROM StudySet WHERE username = ?";
+                q = "SELECT created_by, set_name, set_subject FROM StudySet WHERE created_by = ?";
                 break;
             case "Other":
-                q = "SELECT username, set_name, set_subject FROM StudySet WHERE username != ?";
+                q = "SELECT created_by, set_name, set_subject FROM StudySet WHERE created_by != ?";
                 break;  
         }
         // get table of sets 
         try {
             // JLabel title = new JLabel("Browse " + this.type + " Sets:");
             // leftPanel.add(title);
-            Vector<String> columnNames = new Vector<String>(Arrays.asList("User", "Set Name", "Subject"));
+            Vector<String> columnNames = new Vector<String>(Arrays.asList("Created By", "Set Name", "Subject"));
             Vector<Vector<String>> data = new Vector<Vector<String>>();
             Connection cn = super.getConnection();
             PreparedStatement st = cn.prepareStatement(q);
@@ -59,7 +59,7 @@ public class Browse extends FlashStash {
             // Vector<String> subject = new Vector<String>();
             ResultSet rs = st.executeQuery();
             while(rs.next()) {
-                data.add(new Vector<String>(Arrays.asList(rs.getString("username"), rs.getString("set_name"), rs.getString("set_subject"))));
+                data.add(new Vector<String>(Arrays.asList(rs.getString("created_by"), rs.getString("set_name"), rs.getString("set_subject"))));
                 // choice.add(rs.getString("set_name") + " | " + rs.getString("username"));
                 // subject.add(rs.getString("set_subject"));
             }
