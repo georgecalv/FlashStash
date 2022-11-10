@@ -32,7 +32,7 @@ public class Browse extends FlashStash {
         JPanel leftPanel = new JPanel();
         JPanel rightPanel = new JPanel();
         // rightPanel.setBounds(400, 0, 100, 150);
-        // leftPanel.setBounds(0, 0, 300, 360);
+        leftPanel.setBounds(0, 0, 600, 100);
         // rightPanel.setAlignmentX(SwingConstants.RIGHT);
         // leftPanel.setAlignmentX(SwingConstants.LEFT);
         this.frame.add(leftPanel);
@@ -55,34 +55,41 @@ public class Browse extends FlashStash {
             Connection cn = super.getConnection();
             PreparedStatement st = cn.prepareStatement(q);
             st.setString(1, this.username);
-            Vector<String> choice = new Vector<String>();
-            Vector<String> subject = new Vector<String>();
+            // Vector<String> choice = new Vector<String>();
+            // Vector<String> subject = new Vector<String>();
             ResultSet rs = st.executeQuery();
             while(rs.next()) {
                 data.add(new Vector<String>(Arrays.asList(rs.getString("username"), rs.getString("set_name"), rs.getString("set_subject"))));
-                choice.add(rs.getString("set_name") + " | " + rs.getString("username"));
-                subject.add(rs.getString("set_subject"));
+                // choice.add(rs.getString("set_name") + " | " + rs.getString("username"));
+                // subject.add(rs.getString("set_subject"));
             }
             rs.close();
             st.close();
             cn.close();
-            JComboBox setDropBox = new JComboBox(choice);
-            JTable table  = new JTable(data, columnNames);
+            // JComboBox setDropBox = new JComboBox(choice);
+            JTable table = new JTable(data, columnNames) {
+                public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                   return false;
+                }
+             };
             JScrollPane scrollPane = new JScrollPane(table);
             // table.setBounds(0, 0, 300, 360);
             table.setFillsViewportHeight(true);
+            table.setRowSelectionAllowed(true);
+            table.setColumnSelectionAllowed(false);
+            
 
             // study set button
             JButton study = new JButton("Study");
             study.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    String selected = choice.get(setDropBox.getSelectedIndex());
-                    String[] sep = selected.split(" ");
-                    Study set = new Study(sep[0], sep[2], frame);
+                    // String selected = choice.get(setDropBox.getSelectedIndex());
+                    // String[] sep = selected.split(" ");
+                    // Study set = new Study(sep[0], sep[2], frame);
 
                 }
             });
-            leftPanel.add(setDropBox);
+            // leftPanel.add(setDropBox);
             leftPanel.add(study);
             leftPanel.add(scrollPane);
         }
