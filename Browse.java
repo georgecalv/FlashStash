@@ -83,9 +83,13 @@ public class Browse extends FlashStash {
             JButton study = new JButton("Study");
             study.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    // String selected = choice.get(setDropBox.getSelectedIndex());
-                    // String[] sep = selected.split(" ");
-                    // Study set = new Study(sep[0], sep[2], frame);
+                    int row = table.getSelectedRow();
+                    // int column = table.getSelectedColumn();
+                    String username = data.get(row).get(0);
+                    String setname = data.get(row).get(1);
+                    frame.remove(leftPanel);
+                    Study st = new Study(setname, username, frame);
+                    st.StartStudying();
 
                 }
             });
