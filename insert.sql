@@ -58,8 +58,11 @@ CREATE TABLE Content (
 
 
 -- populating table
-INSERT INTO User VALUES("gcalvert", "1234", "George", "Calvert");
-INSERT INTO User VALUES("jSmith", "4321", "John", "Smith");
+INSERT INTO User VALUES("gcalvert", "1234", "George", "Calvert"),
+                        ("pAbrahm", "password", "Peri", "Abrahm"),
+                        ("dGiacobbi", "p123", "David", "Giacobbi"),
+                        ("jDoe", "userpass", "Jane", "Doe"),
+                        ("jSmith", "4321", "John", "Smith");
 INSERT INTO Subjects VALUES("MA", "Math"),
                     ("SC", "Science"),
                     ("LI", "Literature"),
@@ -79,7 +82,39 @@ INSERT INTO StudySet VALUES(1, "gcalvert", "Database", "SC"),
                             (13, "gcalvert", "CPSC121", "SC"),
                             (14, "gcalvert", "CPSC122", "SC"),
                             (15, "gcalvert", "PHYS101", "LA"),
-                            (16, "gcalvert", "MATH259", "SC");
+                            (16, "pAbrahm", "Meaning Making", "LI"),
+                            (17, "pAbrahm", "Sensations", "SC"),
+                            (18, "pAbrahm", "Practices/Habits", "LI"),
+                            (19, "pAbrahm", "Public Text", "LI"),
+                            (20, "pAbrahm", "Writing", "LA"),
+                            (21, "pAbrahm", "BioSci", "SC"),
+                            (22, "dGiacobbi", "PHIL201", "SC"),
+                            (23, "dGiacobbi", "Religion101", "LI"),
+                            (24, "dGiacobbi", "CPSC222", "SC"),
+                            (25, "dGiacobbi", "CPSC221", "SC"),
+                            (26, "dGiacobbi", "Chem101L", "SC"),
+                            (27, "gcalvert", "MATH259", "SC");
+INSERT INTO Likes VALUES(1, "jSmith"),
+                        (2, "jSmith"),
+                        (3, "jSmith"),
+                        (1, "dGiacobbi"),
+                        (1, "jDoe"),
+                        (1, "pAbrahm"),
+                        (4, "jSmith"),
+                        (4, "pAbrahm"),
+                        (2, "pAbrahm"),
+                        (23, "gcalvert"),
+                        (24, "gcalvert"),
+                        (26, "gcalvert");
+INSERT INTO Content VALUES(1, "question", "answer", "gcalvert", 1),
+                          (2, "question2", "answer2", "gcalvert", 1),
+                          (3, "This is a question", "this is an answer", "gcalvert", 1),
+                          (4, "How many blanks are in a blank", "17", "gcalvert", 1);
+
+                        
+
+                        
+
 
 
 

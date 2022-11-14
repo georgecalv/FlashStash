@@ -11,6 +11,8 @@ import java.util.Properties;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.*;
+import java.awt.GridLayout;
+import java.awt.*;
 
 
 public class Browse extends FlashStash {
@@ -25,48 +27,72 @@ public class Browse extends FlashStash {
         
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(600,360);
+        this.frame.setLayout(new GridLayout(2, 0));
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
     public void Display() {
+        JPanel panel = new JPanel();
         JPanel leftPanel = new JPanel();
-        JPanel rightPanel = new JPanel();
-        // rightPanel.setBounds(400, 0, 100, 150);
-        leftPanel.setBounds(0, 0, 600, 100);
+        GridLayout layout = new GridLayout(1, 1);
+        panel.setLayout(layout);
+        // leftPanel.setBounds(300, 0, 300, 360);
+        // panel.setBounds(300, 0, 300, 360);
+
         // rightPanel.setAlignmentX(SwingConstants.RIGHT);
         // leftPanel.setAlignmentX(SwingConstants.LEFT);
-        this.frame.add(leftPanel);
+        this.frame.add(panel);
         String q = "";
 
         switch(this.type) {
             case "Own":
-                q = "SELECT created_by, set_name, set_subject FROM StudySet WHERE created_by = ?";
+                q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by = ?";
                 break;
             case "Other":
-                q = "SELECT created_by, set_name, set_subject FROM StudySet WHERE created_by != ?";
+                q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by != ?";
                 break;  
         }
         // get table of sets 
         try {
             // JLabel title = new JLabel("Browse " + this.type + " Sets:");
             // leftPanel.add(title);
+
+
+            // Filter settings
+            String fq = "SELECT * FROM Subjects";
+            PreparedStatement subs = cn.prepareStatement(fq);
+            ResultSet subRS = subs.executeQuery();
+            Vector<String> subjectName = new Vector<String>();
+            Vector<String> subjectCode = new Vector<String>();
+            while(subRS.next()) {
+                subjectName.add(subRS.getString("subject_name"));
+                subjectCode.add(subRS.getString("subject_code"));
+            }
+
+            // filter which affects the content in scroll pane
+            JButton filter = new JButton("Filter");
+            filter.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+
+            // make table
             Vector<String> columnNames = new Vector<String>(Arrays.asList("Created By", "Set Name", "Subject"));
             Vector<Vector<String>> data = new Vector<Vector<String>>();
+            Vector<String> set_ids = new Vector<String>();
             Connection cn = super.getConnection();
             PreparedStatement st = cn.prepareStatement(q);
             st.setString(1, this.username);
-            // Vector<String> choice = new Vector<String>();
-            // Vector<String> subject = new Vector<String>();
             ResultSet rs = st.executeQuery();
             while(rs.next()) {
                 data.add(new Vector<String>(Arrays.asList(rs.getString("created_by"), rs.getString("set_name"), rs.getString("set_subject"))));
-                // choice.add(rs.getString("set_name") + " | " + rs.getString("username"));
-                // subject.add(rs.getString("set_subject"));
+                set_ids.add(rs.getString("set_id"));
             }
             rs.close();
             st.close();
             cn.close();
-            // JComboBox setDropBox = new JComboBox(choice);
+            JComboBox subjectDropBox = new JComboBox(subjectName);
             JTable table = new JTable(data, columnNames) {
                 public boolean editCellAt(int row, int column, java.util.EventObject e) {
                    return false;
@@ -86,25 +112,25 @@ public class Browse extends FlashStash {
                     int row = table.getSelectedRow();
                     // int column = table.getSelectedColumn();
                     String username = data.get(row).get(0);
-                    String setname = data.get(row).get(1);
-                    frame.remove(leftPanel);
-                    Study st = new Study(setname, username, frame);
+                    String setcode = set_ids.get(row);
+                    frame.remove(panel);
+                    Study st = new Study(setcode, username, frame);
                     st.StartStudying();
 
                 }
             });
-            // leftPanel.add(setDropBox);
-            leftPanel.add(study);
-            leftPanel.add(scrollPane);
+            panel.add(scrollPane);
+            panel.add(subjectDropBox);
+            panel.add(study);
         }
         catch(SQLException e) {
             e.printStackTrace();
         }
-        // rightPanel.repaint();
-        // rightPanel.revalidate();
         leftPanel.repaint();
         leftPanel.revalidate();
-        this.frame.add(leftPanel);
+        panel.repaint();
+        panel.revalidate();
+        this.frame.add(panel);
         // this.frame.add(rightPanel);
         this.frame.setVisible(true);
     }
