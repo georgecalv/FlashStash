@@ -64,16 +64,20 @@ public class Browse extends FlashStash {
             ResultSet subRS = subs.executeQuery();
             Vector<String> subjectName = new Vector<String>();
             Vector<String> subjectCode = new Vector<String>();
+            subjectName.add("No Filter");
             while(subRS.next()) {
                 subjectName.add(subRS.getString("subject_name"));
                 subjectCode.add(subRS.getString("subject_code"));
             }
+            JComboBox subjectDropBox = new JComboBox(subjectName);
+            Vector<String> choices = new Vector<String>(Arrays.asList("No Filter", "Most Liked", "Least Liked"));
+            JComboBox likes = new JComboBox(choices);
 
             // filter which affects the content in scroll pane
             JButton filter = new JButton("Filter");
             filter.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-
+                    // filter scroll panel
                 }
             });
 
@@ -92,7 +96,6 @@ public class Browse extends FlashStash {
             rs.close();
             st.close();
             cn.close();
-            JComboBox subjectDropBox = new JComboBox(subjectName);
             JTable table = new JTable(data, columnNames) {
                 public boolean editCellAt(int row, int column, java.util.EventObject e) {
                    return false;
@@ -112,15 +115,18 @@ public class Browse extends FlashStash {
                     int row = table.getSelectedRow();
                     // int column = table.getSelectedColumn();
                     String username = data.get(row).get(0);
-                    String setcode = set_ids.get(row);
+                    String setcode = set_ids.get(row + 1);
                     frame.remove(panel);
                     Study st = new Study(setcode, username, frame);
                     st.StartStudying();
 
                 }
             });
-            panel.add(scrollPane);
+            // panel.add(scrollPane);
+            frame.add(scrollPane);
             panel.add(subjectDropBox);
+            panel.add(likes);
+            panel.add(filter);
             panel.add(study);
         }
         catch(SQLException e) {
