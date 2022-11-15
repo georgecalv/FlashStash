@@ -2,7 +2,7 @@
 import java.awt.event.*;
 import javax.swing.*;
 // import java.awt.Image;
-import java.awt.Dimension;
+// import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,10 +10,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+// import java.sql.Statement;
 import java.util.Properties;
 import java.sql.PreparedStatement;
-import java.awt.Container;
+// import java.awt.Container;
+// import java.awt.*;
 
 public class FlashStash {
     JFrame frame;
@@ -26,8 +27,10 @@ public class FlashStash {
 
         // frame settings
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.frame.setLayout(new Boxlayout());
         this.frame.setSize(600,360);
         this.frame.setLocationRelativeTo(null);
+        this.frame.setResizable(false);
         this.frame.setVisible(true); 
     }
     // log into FlashStash
@@ -36,8 +39,8 @@ public class FlashStash {
         login.setAlignmentY(SwingConstants.CENTER);
         this.frame.add(login);
         Box input = Box.createVerticalBox();
-        JLabel userLabel = new JLabel("Username: ");
-        JLabel passLabel = new JLabel("Password: ");
+        // JLabel userLabel = new JLabel("Username: ");
+        // JLabel passLabel = new JLabel("Password: ");
         JFormattedTextField user = new JFormattedTextField();
         user.setEditable(true);
         JPasswordField pass = new JPasswordField();

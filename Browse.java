@@ -24,7 +24,6 @@ public class Browse extends FlashStash {
         this.frame = frame;
         this.username = user;
         this.type = type;
-        
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(600,360);
         this.frame.setLayout(new GridLayout(2, 0));
@@ -34,7 +33,7 @@ public class Browse extends FlashStash {
     public void Display() {
         JPanel panel = new JPanel();
         JPanel leftPanel = new JPanel();
-        GridLayout layout = new GridLayout(1, 1);
+        GridLayout layout = new GridLayout(1, 0);
         panel.setLayout(layout);
         // leftPanel.setBounds(300, 0, 300, 360);
         // panel.setBounds(300, 0, 300, 360);
@@ -109,25 +108,44 @@ public class Browse extends FlashStash {
             
 
             // study set button
-            JButton study = new JButton("Study");
+            JButton study = new JButton("Select");
             study.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     int row = table.getSelectedRow();
                     // int column = table.getSelectedColumn();
                     String username = data.get(row).get(0);
-                    String setcode = set_ids.get(row + 1);
+                    String setName = data.get(row).get(1);
+                    String setcode = set_ids.get(row);
+                    frame.remove(scrollPane);
                     frame.remove(panel);
-                    Study st = new Study(setcode, username, frame);
+                    frame.repaint();
+                    frame.revalidate();
+                    Study st = new Study(setcode, username, frame, setName);
                     st.StartStudying();
 
                 }
             });
+
+            JButton goBack = new JButton("Go Back");
+            goBack.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    userHome homePg = new userHome(frame, username);
+                    homePg.Display();
+                    frame.remove(panel);
+                    frame.remove(scrollPane);
+                    frame.repaint();
+                    frame.revalidate();
+                }
+            });
+
+    
             // panel.add(scrollPane);
             frame.add(scrollPane);
             panel.add(subjectDropBox);
             panel.add(likes);
             panel.add(filter);
             panel.add(study);
+            panel.add(goBack);
         }
         catch(SQLException e) {
             e.printStackTrace();

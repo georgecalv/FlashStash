@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.awt.*;
 
 public class userHome extends FlashStash{
     JFrame frame;
@@ -9,6 +10,11 @@ public class userHome extends FlashStash{
     public userHome(JFrame frame, String username) {
         this.frame = frame;
         this.username = username;
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setSize(600,360);
+        this.frame.setLayout(new GridLayout(2, 0));
+        this.frame.setLocationRelativeTo(null);
+        this.frame.setVisible(true); 
     }
     public void Display() {
         // add 5 buttons
