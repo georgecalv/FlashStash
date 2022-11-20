@@ -23,7 +23,12 @@ public class FlashStash {
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
-        this.cn = getConnection();
+        try {
+            this.cn = getConnection();
+        }
+        catch(SQLException e) {
+            System.out.println(e.getStackTrace());
+        }
 
         // frame settings
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,19 +91,21 @@ public class FlashStash {
 
     }
     // get connection
-    public Connection getConnection() {
+    public Connection getConnection() throws SQLException {
         String[] connection = getUrl(); 
         // connect to database
-        try {
-            Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
-            return cn;
+        // try {
+        //     Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
+        //     return cn;
             
-        }
-        catch(SQLException e) {
-            e.getStackTrace();
-            System.out.println("Connection Error");
-            return cn;
-        }
+        // }
+        // catch(SQLException e) {
+        //     e.getStackTrace();
+        //     System.out.println("Connection Error");
+            
+        // }
+        Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
+        return cn;
     } 
 
     // get url

@@ -1,12 +1,3 @@
 config.properties
-userHome$1.class
-userHome$2.class
-userHome$3.class
-userHome$4.class
-Browse.class
-CreateSet.class
-FlashStash.class
-FlashStash$1.class
-userHome.class
-userHome.class
-FlashStash$1.class
+*.class
+
