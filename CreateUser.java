@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.ResultSet;
 
 public class CreateUser extends FlashStash{
     public CreateUser() {
@@ -13,6 +12,7 @@ public class CreateUser extends FlashStash{
     public void display() {
         // userFrame settings
         JFrame userFrame = new JFrame("Create User: ");
+        JPanel panel = new JPanel(); 
         userFrame.setLayout(new FlowLayout());
         Box vBox = Box.createVerticalBox();
 
@@ -63,11 +63,13 @@ public class CreateUser extends FlashStash{
                         ps.setString(3, fNameInput.getText());
                         ps.setString(4, lNameInput.getText());
                         ps.execute();
-                        userFrame.removeAll();
-                        userFrame.repaint();
-                        userFrame.revalidate();
+
+                        panel.removeAll();
+                        panel.revalidate();
+                        panel.repaint();
                         userHome homePg = new userHome(userFrame, userInput.getText());
                         homePg.Display();
+                        userFrame.remove(panel);
                         userFrame.repaint();
                         userFrame.revalidate();
                     }
@@ -83,8 +85,8 @@ public class CreateUser extends FlashStash{
         vBox.add(Fname);
         vBox.add(Lname);
         vBox.add(create);
-        userFrame.add(vBox);
-
+        panel.add(vBox);
+        userFrame.add(panel);
         // userFrame settings
         userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // this.userFrame.setLayout(new Boxlayout());
