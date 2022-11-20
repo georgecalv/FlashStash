@@ -84,7 +84,21 @@ public class FlashStash {
                 }
             }
         });
+        JButton newUser = new JButton("Create New User");
+        newUser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                login.removeAll();
+                login.revalidate();
+                login.repaint();
+                CreateUser user = new CreateUser();
+                user.display(); 
+                frame.remove(login);
+                frame.repaint();
+                frame.revalidate();   
+            }
+        });
         input.add(go);
+        input.add(newUser);
         input.setAlignmentX(SwingConstants.CENTER);
         login.revalidate();
         login.repaint();
