@@ -1,6 +1,10 @@
 import java.awt.event.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
 
 public class CreateUser extends FlashStash{
     public CreateUser() {
@@ -20,7 +24,7 @@ public class CreateUser extends FlashStash{
 
         Box password = Box.createHorizontalBox();
         JLabel passLabel = new JLabel("Password: ");
-        JTextField passInput = new JTextField();
+        JPasswordField passInput = new JPasswordField();
         password.add(passLabel);
         password.add(passInput);
 
@@ -40,6 +44,38 @@ public class CreateUser extends FlashStash{
         create.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // check if username exists and all textfields meet requirements
+                try {
+                    if(checkUsername(userInput.getText())) {
+                        JLabel fail = new JLabel("This username already exists Please try again");
+                        vBox.add(fail);
+                        userFrame.revalidate();
+                        userFrame.repaint();
+                    }
+                    else {
+                        String q = "INSERT INTO User Values(?,?,?,?)";
+                        PreparedStatement ps = cn.prepareStatement(q);
+                        ps.setString(1, userInput.getText());
+                        String pass = "";
+                        for(int i = 0; i < passInput.getPassword().length; i++) {
+                            pass += passInput.getPassword()[i];
+                        }
+                        ps.setString(2, pass);
+                        ps.setString(3, fNameInput.getText());
+                        ps.setString(4, lNameInput.getText());
+                        ps.execute();
+                        userFrame.removeAll();
+                        userFrame.repaint();
+                        userFrame.revalidate();
+                        userHome homePg = new userHome(userFrame, userInput.getText());
+                        homePg.Display();
+                        userFrame.repaint();
+                        userFrame.revalidate();
+                    }
+                }
+                catch(SQLException l) {
+                    l.printStackTrace();
+                }
+
             }
         });
         vBox.add(username);

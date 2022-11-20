@@ -197,4 +197,16 @@ public class FlashStash {
             return false;
         }
     }
+    public boolean checkUsername(String username) throws SQLException {
+        String q = "SELECT username FROM User WHERE username = ?";
+        PreparedStatement st = cn.prepareStatement(q);
+        st.setString(1, username);
+        // check if user is a real user
+        ResultSet rs = st.executeQuery();
+        // is a user
+        if (rs.next()) {
+            return true;
+        }
+        return false;
+    }
 }
