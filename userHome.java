@@ -12,7 +12,7 @@ public class userHome extends FlashStash{
         this.username = username;
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(600,360);
-        this.frame.setLayout(new GridLayout(2, 0));
+        this.frame.setLayout(new GridLayout(3, 0));
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
@@ -80,8 +80,9 @@ public class userHome extends FlashStash{
         
 
         lowerPanel.add(logout);
-
-
+        JLabel label = new JLabel("Welcome to FlashStash " + this.username);
+        label.setFont(new Font("Serif", Font.PLAIN, 30));
+        this.frame.add(label);
         this.frame.add(upperPanel);
         this.frame.add(lowerPanel);
         this.frame.setVisible(true);

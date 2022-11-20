@@ -26,7 +26,7 @@ public class Browse extends FlashStash {
         this.type = type;
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(600,360);
-        this.frame.setLayout(new GridLayout(2, 0));
+        this.frame.setLayout(new GridLayout(3, 0));
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
@@ -140,6 +140,7 @@ public class Browse extends FlashStash {
 
     
             // panel.add(scrollPane);
+           
             frame.add(scrollPane);
             panel.add(subjectDropBox);
             panel.add(likes);
