@@ -30,6 +30,7 @@ public class CreateSet {
             public void actionPerformed(ActionEvent e) {
                 userHome homePg = new userHome(frame, username);
                 homePg.Display();
+                // frame.removeAll();
                 frame.remove(panel);
                 frame.repaint();
                 frame.revalidate();

@@ -18,6 +18,9 @@ public class userHome extends FlashStash{
     }
     public void Display() {
         // add 5 buttons
+        JLabel label = new JLabel("Welcome to FlashStash " + this.username);
+        label.setFont(new Font("Serif", Font.PLAIN, 24));
+        this.frame.add(label);
         JPanel upperPanel = new JPanel();
         JPanel lowerPanel = new JPanel();
         upperPanel.setBounds(20, 20, 560, 200);
@@ -29,6 +32,7 @@ public class userHome extends FlashStash{
             public void actionPerformed(ActionEvent e) {
                 // frame.removeAll();
                 // frame.repaint();
+                frame.remove(label);
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 CreateSet cs = new CreateSet(frame, username);
@@ -42,6 +46,8 @@ public class userHome extends FlashStash{
             public void actionPerformed(ActionEvent e) {
                 // frame.removeAll();
                 // frame.repaint();
+                label.setText("Browse Your Own Sets");
+                frame.remove(label);
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 Browse bO = new Browse(frame, username, "Own");
@@ -53,6 +59,7 @@ public class userHome extends FlashStash{
             public void actionPerformed(ActionEvent e) {
                 // frame.removeAll();
                 // frame.repaint();
+                label.setText("Browse Other Sets");
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 Browse bO = new Browse(frame, username, "Other");
@@ -67,6 +74,7 @@ public class userHome extends FlashStash{
             public void actionPerformed(ActionEvent e) {
                 // frame.removeAll();
                 // frame.repaint();
+                frame.remove(label);
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 FlashStash lo = new FlashStash();
@@ -80,9 +88,7 @@ public class userHome extends FlashStash{
         
 
         lowerPanel.add(logout);
-        JLabel label = new JLabel("Welcome to FlashStash " + this.username);
-        label.setFont(new Font("Serif", Font.PLAIN, 30));
-        this.frame.add(label);
+
         this.frame.add(upperPanel);
         this.frame.add(lowerPanel);
         this.frame.setVisible(true);
