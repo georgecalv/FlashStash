@@ -26,7 +26,7 @@ public class Browse extends FlashStash {
         this.type = type;
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(600,360);
-        this.frame.setLayout(new GridLayout(3, 0));
+        this.frame.setLayout(new GridLayout(2, 0));
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
@@ -35,11 +35,6 @@ public class Browse extends FlashStash {
         JPanel leftPanel = new JPanel();
         GridLayout layout = new GridLayout(1, 0);
         panel.setLayout(layout);
-        // leftPanel.setBounds(300, 0, 300, 360);
-        // panel.setBounds(300, 0, 300, 360);
-
-        // rightPanel.setAlignmentX(SwingConstants.RIGHT);
-        // leftPanel.setAlignmentX(SwingConstants.LEFT);
         this.frame.add(panel);
         String q = "";
 
@@ -120,7 +115,7 @@ public class Browse extends FlashStash {
                     frame.remove(panel);
                     frame.repaint();
                     frame.revalidate();
-                    Study st = new Study(setcode, username, frame, setName);
+                    Study st = new Study(setcode, username, frame, setName, type);
                     st.StartStudying();
 
                 }
@@ -130,11 +125,11 @@ public class Browse extends FlashStash {
             goBack.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     userHome homePg = new userHome(frame, username);
-                    homePg.Display();
                     frame.remove(panel);
                     frame.remove(scrollPane);
                     frame.repaint();
                     frame.revalidate();
+                    homePg.Display();
                 }
             });
 
@@ -156,7 +151,6 @@ public class Browse extends FlashStash {
         panel.repaint();
         panel.revalidate();
         this.frame.add(panel);
-        // this.frame.add(rightPanel);
         this.frame.setVisible(true);
     }
 }

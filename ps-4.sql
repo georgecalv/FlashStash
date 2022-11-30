@@ -18,7 +18,7 @@ FROM User JOIN StudySet ON(created_by = username)
 GROUP BY username
 -- this is interesting since it counts the number of studysets each user has created 
 -- allowing me to sort users by those who have created the most sets in the whole database. 
--- seeing which users contribute the most to the community in terms of creating sets fro others to use.
+-- seeing which users contribute the most to the community in terms of creating sets for others to use.
 
 
 -- Question 3

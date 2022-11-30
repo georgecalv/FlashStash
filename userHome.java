@@ -46,12 +46,14 @@ public class userHome extends FlashStash{
             public void actionPerformed(ActionEvent e) {
                 // frame.removeAll();
                 // frame.repaint();
-                label.setText("Browse Your Own Sets");
+                // label.setText("Browse Your Own Sets");
                 frame.remove(label);
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 Browse bO = new Browse(frame, username, "Own");
                 bO.Display();
+                frame.repaint();
+                frame.revalidate();
             }
         });
         JButton browse = new JButton("Browse Other Study Sets");
@@ -59,11 +61,14 @@ public class userHome extends FlashStash{
             public void actionPerformed(ActionEvent e) {
                 // frame.removeAll();
                 // frame.repaint();
-                label.setText("Browse Other Sets");
+                // label.setText("Browse Other Sets");
+                frame.remove(label);
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 Browse bO = new Browse(frame, username, "Other");
                 bO.Display();
+                frame.repaint();
+                frame.revalidate();
             }
         });
 

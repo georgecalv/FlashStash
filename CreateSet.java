@@ -17,10 +17,10 @@ public class CreateSet {
     public CreateSet(JFrame frame, String username) {
         this.frame = frame;
         this.username = username;
-        // this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // this.frame.setSize(600,360);
-        // this.frame.setLocationRelativeTo(null);
-        // this.frame.setVisible(true); 
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setSize(600,360);
+        this.frame.setLocationRelativeTo(null);
+        this.frame.setVisible(true); 
     }
     public void Display() {
         JPanel panel = new JPanel();
@@ -38,10 +38,8 @@ public class CreateSet {
         });
         panel.add(goBack);
         this.frame.add(panel);
-        JPanel upper = new JPanel();
-        JLabel title = new JLabel("Create Set");
-        // upper.add(title);
-        // this.frame.add(upper);
+        // JPanel upper = new JPanel();
+        // JLabel title = new JLabel("Create Set");
         this.frame.setVisible(true);
     }
 }
