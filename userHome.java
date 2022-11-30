@@ -35,6 +35,8 @@ public class userHome extends FlashStash{
                 frame.remove(label);
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
+                frame.repaint();
+                frame.revalidate();
                 CreateSet cs = new CreateSet(frame, username);
                 cs.Display();   
             }
