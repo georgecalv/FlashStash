@@ -95,21 +95,12 @@ public class CreateSet extends FlashStash{
                     subjects.add(answer);
                     options.remove(select);
                     // finsihed with data
-                    JButton done = new JButton("Done");
-                    done.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            // create study set and then add questions and answers
-                        }
-                    });
-                    options.add(done);
-
-                    options.repaint();
-                    options.revalidate();
                     // get questions and answers
 
-                    getQuestions(subjectDropBox, subjects, subjectName, subjectCode);
+                    getQuestions(subjectDropBox, subjects, subjectName, subjectCode, answer, answerLabel);
                 }
             });
+            options.add(select);
         }
         catch(SQLException e) {
             e.printStackTrace();
@@ -133,33 +124,47 @@ public class CreateSet extends FlashStash{
         this.frame.setVisible(true);
 
     }
-    public void getQuestions(JComboBox subjectDropBox, Box subjects, Vector<String> subjectName, Vector<String> subjectCode) {
-
-            // submit question and Answer
-        //     JButton submit = new JButton("Submit");
-        //     submit.addActionListener(new ActionListener() {
-        //         public void actionPerformed(ActionEvent e) {
-        //             questions.add(name.getText());
-        //             answers.add(answer.getText());
-        //             options.remove(select);
-        //             options.remove(done);
-        //             options.repaint();
-        //             options.revalidate();
-        //             content.repaint();
-        //             content.revalidate();
-        //             getQuestions(subjectDropBox, subjects, subjectName, subjectCode);
-        //             // options.repaint();
-        //             // options.revalidate();
-        //             // content.repaint();
-        //             // content.revalidate();
-        //         }
-        //     });
-        // options.add(submit);
-        // options.repaint();
-        // options.revalidate();
-        // content.repaint();
-        // content.revalidate();
-        // options.add(select);
+    public void getQuestions(JComboBox subjectDropBox, Box subjects, Vector<String> subjectName, Vector<String> subjectCode, JTextField answer, JLabel answerLabel) {
+        title.setText("Question: ");
+        name.setText("Enter Text");
+        subjects.removeAll();
+        answerLabel.setText("Answer: ");
+        answer.setText("Enter Text");
+        subjects.add(answerLabel);
+        subjects.add(answer);
+        JButton done = new JButton("Done");
+        done.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // create study set and then add questions and answers
+            }
+        });
+        options.add(done);
+        options.repaint();
+        options.revalidate();
+        // submit question and Answer
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                questions.add(name.getText());
+                answers.add(answer.getText());
+                options.remove(done);
+                options.remove(submit);
+                options.repaint();
+                options.revalidate();
+                content.repaint();
+                content.revalidate();
+                getQuestions(subjectDropBox, subjects, subjectName, subjectCode, answer, answerLabel);
+                // options.repaint();
+                // options.revalidate();
+                // content.repaint();
+                // content.revalidate();
+            }
+        });
+        options.add(submit);
+        options.repaint();
+        options.revalidate();
+        content.repaint();
+        content.revalidate();
     }
 }
 
