@@ -135,7 +135,8 @@ public class CreateSet extends FlashStash{
         JButton done = new JButton("Done");
         done.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // create study set and then add questions and answers
+                // create study set and then add questions and answers with sql
+
             }
         });
         options.add(done);
