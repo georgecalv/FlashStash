@@ -15,7 +15,7 @@ FROM User JOIN StudySet ON(created_by = username)
 -- Question 2
 SELECT username, COUNT(*) AS number_sets
 FROM User JOIN StudySet ON(created_by = username)
-GROUP BY username
+GROUP BY username;
 -- this is interesting since it counts the number of studysets each user has created 
 -- allowing me to sort users by those who have created the most sets in the whole database. 
 -- seeing which users contribute the most to the community in terms of creating sets for others to use.
@@ -25,7 +25,7 @@ GROUP BY username
 SELECT set_name, COUNT(*) AS number_saves
 FROM StudySet JOIN Saves USING(set_id)
 GROUP BY set_id
-HAVING COUNT >= 2
+HAVING COUNT() >= 2
 ORDER BY number_saves DESC
 -- this query is interesting since it finds the study sets with the most saves by users
 -- and displays it in descending order. Allowing the user to filter sets and browse the ones with
