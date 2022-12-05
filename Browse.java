@@ -112,7 +112,16 @@ public class Browse extends FlashStash {
                         String q = "";
                         // no filters
                         if(subjectFilter.equals("No Filter") && likedFilter.equals("No Filter")) {
-                            q = "no filters";
+                            switch(type) {
+                                case "Own":
+                                    q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by = ?";
+                                    break;
+                                case "Other":
+                                    q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by != ?";
+                                    break;  
+                                case "Saved":
+                                    q = "SELECT created_by, set_name, set_subject, set_id FROM Saves JOIN StudySet USING(set_id) WHERE username = ?";
+                            }
                         }
                         // no subject filter most liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
@@ -219,16 +228,21 @@ public class Browse extends FlashStash {
             study.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     int row = table.getSelectedRow();
-                    // int column = table.getSelectedColumn();
-                    String createdBy = data.get(row).get(0);
-                    String setName = data.get(row).get(1);
-                    String setcode = set_ids.get(row);
-                    frame.remove(scrollPane);
-                    frame.remove(panel);
-                    frame.repaint();
-                    frame.revalidate();
-                    Study st = new Study(setcode, createdBy, username, frame, setName, type);
-                    st.StartStudying();
+                    if(row < 0) {
+                        // do ntohing
+                    }
+                    else {
+                        // int column = table.getSelectedColumn();
+                        String createdBy = data.get(row).get(0);
+                        String setName = data.get(row).get(1);
+                        String setcode = set_ids.get(row);
+                        frame.remove(scrollPane);
+                        frame.remove(panel);
+                        frame.repaint();
+                        frame.revalidate();
+                        Study st = new Study(setcode, createdBy, username, frame, setName, type);
+                        st.StartStudying();
+                    }
 
                 }
             });
