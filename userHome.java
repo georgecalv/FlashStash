@@ -73,6 +73,21 @@ public class userHome extends FlashStash{
                 frame.revalidate();
             }
         });
+        JButton saved = new JButton("Browse Your Saved Sets");
+        saved.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // frame.removeAll();
+                // frame.repaint();
+                // label.setText("Browse Other Sets");
+                frame.remove(label);
+                frame.remove(upperPanel);
+                frame.remove(lowerPanel);
+                Browse bO = new Browse(frame, username, "Saved");
+                bO.Display();
+                frame.repaint();
+                frame.revalidate();
+            }
+        });
 
         // logout
         JButton logout = new JButton("Logout");
@@ -92,6 +107,7 @@ public class userHome extends FlashStash{
         upperPanel.add(newStudySet);
         upperPanel.add(browseOwn);
         upperPanel.add(browse);
+        upperPanel.add(saved);
         
 
         lowerPanel.add(logout);

@@ -13,6 +13,7 @@ public class Study extends FlashStash{
     JFrame frame;
     String setCode;
     String userName;
+    String createdBy;
     String setName;
     String type;
     ArrayList<String> question;
@@ -22,8 +23,9 @@ public class Study extends FlashStash{
     JPanel options;
     JPanel back;
 
-    public Study(String setCode, String userName, JFrame frame, String setName, String type) {
+    public Study(String setCode, String createdBy, String userName, JFrame frame, String setName, String type) {
         this.userName = userName;
+        this.createdBy = createdBy;
         this.setCode = setCode;
         this.setName = setName;
         this.frame = frame;
@@ -41,13 +43,13 @@ public class Study extends FlashStash{
     }
     public void StartStudying() {
         JPanel panel = new JPanel();
-        JLabel title = new JLabel(userName + "'s " + this.setName + " Study Set");
+        JLabel title = new JLabel(this.createdBy + "'s " + this.setName + " Study Set");
         title.setBounds(0, 0, 100, 20);
         this.frame.add(title);
         try {
             String q = "SELECT question, answer FROM Content WHERE username = ? and study_set = ?";
             PreparedStatement st = super.cn.prepareStatement(q);
-            st.setString(1, this.userName);
+            st.setString(1, this.createdBy);
             st.setString(2, this.setCode);
             ResultSet rs = st.executeQuery();
             Vector<Vector<String>> content = new Vector<Vector<String>>();
