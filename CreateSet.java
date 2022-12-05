@@ -134,9 +134,44 @@ public class CreateSet extends FlashStash{
         subjects.add(answer);
         JButton done = new JButton("Done");
         done.addActionListener(new ActionListener() {
+            int times = 0;
             public void actionPerformed(ActionEvent e) {
                 // create study set and then add questions and answers with sql
-
+                times++;
+                if(times <= 1){
+                    try {
+                        // add study set to database
+                        String q = "INSERT INTO StudySet (created_by, set_name, set_subject) VALUES (?,?,?)";
+                        PreparedStatement ps = cn.prepareStatement(q);
+                        ps.setString(1, username);
+                        ps.setString(2, set.get(0));
+                        ps.setString(3, set.get(1));
+                        ps.execute();
+                        
+                        // check what number is the id of the set
+                        q = "SELECT * FROM StudySet";
+                        ps = cn.prepareStatement(q);
+                        ResultSet rs = ps.executeQuery();
+                        int num = 0;
+                        while(rs.next()) {
+                            num++;
+                        }
+    
+                        // add questions and answers to dataset
+                        q = "INSERT INTO Content (question, answer, username, study_set) VALUES (?,?,?,?)";
+                        ps = cn.prepareStatement(q);
+                        for(int i = 0; i < questions.size(); i++) {
+                            ps.setString(1, questions.get(i));
+                            ps.setString(2, answers.get(i));
+                            ps.setString(3, username);
+                            ps.setInt(4, num);
+                            ps.execute();
+                        }
+                    }
+                    catch(SQLException l) {
+                        l.printStackTrace();
+                    }
+                }  
             }
         });
         options.add(done);
