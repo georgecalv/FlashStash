@@ -186,31 +186,23 @@ public class Browse extends FlashStash {
                                 "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";;
                         }
 
-                        // check if no filters first then reupdate table
-                        if(!q.equals("no filters")) {
-                            // do query 
-                            PreparedStatement st = cn.prepareStatement(q); 
-                            // if(type.equals("Other")) {
-                            //     st.setString(1, "!= " + username);
-                            // }
-                            // else {
-                            //     st.setString(1, "= " + username);
-                            // }
-                            st.setString(1, username);
-                            ResultSet rs = st.executeQuery();
-                            data.clear();
-                            set_ids.clear();
-                            table.removeAll();
-                            while(rs.next()) {
-                                data.add(new Vector<String>(Arrays.asList(rs.getString("created_by"), rs.getString("set_name"), rs.getString("set_subject"))));
-                                set_ids.add(rs.getString("set_id"));
-                            }
-                            table = new JTable(data, columnNames) {
-                                public boolean editCellAt(int row, int column, java.util.EventObject e) {
-                                   return false;
-                                }
-                            };
+                        // do query 
+                        PreparedStatement st = cn.prepareStatement(q); 
+                        st.setString(1, username);
+                        ResultSet rs = st.executeQuery();
+                        data.clear();
+                        set_ids.clear();
+                        table.removeAll();
+                        while(rs.next()) {
+                            data.add(new Vector<String>(Arrays.asList(rs.getString("created_by"), rs.getString("set_name"), rs.getString("set_subject"))));
+                            set_ids.add(rs.getString("set_id"));
                         }
+                        table = new JTable(data, columnNames) {
+                            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                                return false;
+                            }
+                        };
+                        
                     }
                     catch(SQLException l) {
                         l.printStackTrace();
