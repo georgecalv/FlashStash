@@ -21,6 +21,8 @@ public class Browse extends FlashStash {
     String type;
     String username;
     JTable table;
+    String operator;
+    JScrollPane scrollPane;
 
     public Browse(JFrame frame, String user, String type) {
         this.frame = frame;
@@ -43,9 +45,11 @@ public class Browse extends FlashStash {
         switch(this.type) {
             case "Own":
                 q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by = ?";
+                this.operator = "=";
                 break;
             case "Other":
                 q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by != ?";
+                this.operator = "!=";
                 break;  
             case "Saved":
                 q = "SELECT created_by, set_name, set_subject, set_id FROM Saves JOIN StudySet USING(set_id) WHERE username = ?";
@@ -93,7 +97,7 @@ public class Browse extends FlashStash {
                    return false;
                 }
              };
-            JScrollPane scrollPane = new JScrollPane(table);
+            this.scrollPane = new JScrollPane(table);
             // table.setBounds(0, 0, 300, 360);
             table.setFillsViewportHeight(true);
             table.setRowSelectionAllowed(true);
@@ -134,7 +138,7 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by != ?";
+                                "WHERE created_by " + operator + " ?";
                         }
                         // no subject filter least liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Least Liked")) {
@@ -147,7 +151,7 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by != ?";
+                                "WHERE created_by " + operator + " ?";
                         }
                         //subject filter with most liked
                         else if(likedFilter.equals("Most Liked")) {
@@ -160,7 +164,7 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by != ? AND set_subject = '" + subjectFilter + "'";
+                                "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";
                         }
                         // subject filter least liked
                         else if(likedFilter.equals("Least Liked")) {
@@ -173,13 +177,13 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by != ? AND set_subject = '" + subjectFilter + "'";;
+                                "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";;
                         }
                         // subject filter no like filter
                         else if(!subjectFilter.equals("No Filter")) {
                             q = "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM StudySet " +
-                                "WHERE created_by != ? AND set_subject = '" + subjectFilter + "'";;
+                                "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";;
                         }
 
                         // check if no filters first then reupdate table
@@ -216,6 +220,7 @@ public class Browse extends FlashStash {
                     // update table
                     table.repaint();
                     table.revalidate();
+                    scrollPane.add(table);
                     frame.repaint();
                     frame.revalidate();
                     // contactTableModel.fireTableDataChanged();
