@@ -87,7 +87,7 @@ public class Browse extends FlashStash {
             }
             rs.close();
             st.close();
-            cn.close();
+            // cn.close();
             table = new JTable(data, columnNames) {
                 public boolean editCellAt(int row, int column, java.util.EventObject e) {
                    return false;
@@ -117,7 +117,7 @@ public class Browse extends FlashStash {
                         // no subject filter most liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
                             q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
                                 "FROM StudySet JOIN Likes USING(set_id) " +
                                 "GROUP BY set_id " +
                                 "HAVING number_likes >= 1 " +
@@ -125,12 +125,12 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by ?";
+                                "WHERE created_by != ?";
                         }
                         // no subject filter least liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Least Liked")) {
                             q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
                                 "FROM StudySet JOIN Likes USING(set_id) " +
                                 "GROUP BY set_id " +
                                 "HAVING number_likes >= 1 " +
@@ -138,12 +138,12 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by ?";
+                                "WHERE created_by != ?";
                         }
                         //subject filter with most liked
                         else if(likedFilter.equals("Most Liked")) {
                             q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
                                 "FROM StudySet JOIN Likes USING(set_id) " +
                                 "GROUP BY set_id " +
                                 "HAVING number_likes >= 1 " +
@@ -151,12 +151,12 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by ? AND set_subject = " + subjectFilter + "";
+                                "WHERE created_by != ? AND set_subject = '" + subjectFilter + "'";
                         }
                         // subject filter least liked
                         else if(likedFilter.equals("Least Liked")) {
                             q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
                                 "FROM StudySet JOIN Likes USING(set_id) " +
                                 "GROUP BY set_id " +
                                 "HAVING number_likes >= 1 " +
@@ -164,25 +164,26 @@ public class Browse extends FlashStash {
                                 ") " + 
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
-                                "WHERE created_by ? AND set_subject = " + subjectFilter + "";
+                                "WHERE created_by != ? AND set_subject = '" + subjectFilter + "'";;
                         }
                         // subject filter no like filter
                         else if(!subjectFilter.equals("No Filter")) {
                             q = "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM StudySet " +
-                                "WHERE created_by ? AND set_subject = " + subjectFilter + "";
+                                "WHERE created_by != ? AND set_subject = '" + subjectFilter + "'";;
                         }
 
                         // check if no filters first then reupdate table
                         if(!q.equals("no filters")) {
                             // do query 
                             PreparedStatement st = cn.prepareStatement(q); 
-                            if(type.equals("Other")) {
-                                st.setString(1, "!= " + username);
-                            }
-                            else {
-                                st.setString(1, "= " + username);
-                            }
+                            // if(type.equals("Other")) {
+                            //     st.setString(1, "!= " + username);
+                            // }
+                            // else {
+                            //     st.setString(1, "= " + username);
+                            // }
+                            st.setString(1, username);
                             ResultSet rs = st.executeQuery();
                             data.clear();
                             set_ids.clear();
@@ -205,6 +206,9 @@ public class Browse extends FlashStash {
 
                     // update table
                     table.repaint();
+                    table.revalidate();
+                    frame.repaint();
+                    frame.revalidate();
                     // contactTableModel.fireTableDataChanged();
                 }
             });
