@@ -21,7 +21,7 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: admin stats object, filter search, how everything looks(BRANCH)
+    // TODO: admin stats object, filter search, how everything looks(BRANCH), number of windows that open
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
