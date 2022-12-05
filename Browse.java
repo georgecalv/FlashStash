@@ -20,6 +20,7 @@ public class Browse extends FlashStash {
     JFrame frame;
     String type;
     String username;
+    JTable table;
 
     public Browse(JFrame frame, String user, String type) {
         this.frame = frame;
@@ -87,7 +88,7 @@ public class Browse extends FlashStash {
             rs.close();
             st.close();
             cn.close();
-            JTable table = new JTable(data, columnNames) {
+            table = new JTable(data, columnNames) {
                 public boolean editCellAt(int row, int column, java.util.EventObject e) {
                    return false;
                 }
@@ -102,37 +103,108 @@ public class Browse extends FlashStash {
             JButton filter = new JButton("Filter");
             filter.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    // filter scroll panel
-                    String subjectFilter = subjectCode.get(subjectDropBox.getSelectedIndex());
-                    String likedFilter = choices.get(likes.getSelectedIndex());
-                    System.out.println(subjectFilter);
-                    System.out.println(likedFilter);
-                    String q = "";
-                    // no filters
-                    if(subjectFilter.equals("No Filter") && likedFilter.equals("No Filter")) {
-                        q = "no filters";
+                    try {
+                        // filter scroll panel
+                        String subjectFilter = subjectCode.get(subjectDropBox.getSelectedIndex());
+                        String likedFilter = choices.get(likes.getSelectedIndex());
+                        System.out.println(subjectFilter);
+                        System.out.println(likedFilter);
+                        String q = "";
+                        // no filters
+                        if(subjectFilter.equals("No Filter") && likedFilter.equals("No Filter")) {
+                            q = "no filters";
+                        }
+                        // no subject filter most liked
+                        else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
+                            q = "WITH most_liked AS(" +
+                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "FROM StudySet JOIN Likes USING(set_id) " +
+                                "GROUP BY set_id " +
+                                "HAVING number_likes >= 1 " +
+                                "ORDER BY number_likes DESC " +
+                                ") " + 
+                                "SELECT created_by, set_name, set_subject, set_id " +
+                                "FROM most_liked " +
+                                "WHERE created_by ?";
+                        }
+                        // no subject filter least liked
+                        else if(subjectFilter.equals("No Filter") && likedFilter.equals("Least Liked")) {
+                            q = "WITH most_liked AS(" +
+                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "FROM StudySet JOIN Likes USING(set_id) " +
+                                "GROUP BY set_id " +
+                                "HAVING number_likes >= 1 " +
+                                "ORDER BY number_likes " +
+                                ") " + 
+                                "SELECT created_by, set_name, set_subject, set_id " +
+                                "FROM most_liked " +
+                                "WHERE created_by ?";
+                        }
+                        //subject filter with most liked
+                        else if(likedFilter.equals("Most Liked")) {
+                            q = "WITH most_liked AS(" +
+                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "FROM StudySet JOIN Likes USING(set_id) " +
+                                "GROUP BY set_id " +
+                                "HAVING number_likes >= 1 " +
+                                "ORDER BY number_likes DESC " +
+                                ") " + 
+                                "SELECT created_by, set_name, set_subject, set_id " +
+                                "FROM most_liked " +
+                                "WHERE created_by ? AND set_subject = " + subjectFilter + "";
+                        }
+                        // subject filter least liked
+                        else if(likedFilter.equals("Least Liked")) {
+                            q = "WITH most_liked AS(" +
+                                "SELECT set_name, created_by, set_name, set_subject, COUNT(*) AS number_likes " +
+                                "FROM StudySet JOIN Likes USING(set_id) " +
+                                "GROUP BY set_id " +
+                                "HAVING number_likes >= 1 " +
+                                "ORDER BY number_likes " +
+                                ") " + 
+                                "SELECT created_by, set_name, set_subject, set_id " +
+                                "FROM most_liked " +
+                                "WHERE created_by ? AND set_subject = " + subjectFilter + "";
+                        }
+                        // subject filter no like filter
+                        else if(!subjectFilter.equals("No Filter")) {
+                            q = "SELECT created_by, set_name, set_subject, set_id " +
+                                "FROM StudySet " +
+                                "WHERE created_by ? AND set_subject = " + subjectFilter + "";
+                        }
+
+                        // check if no filters first then reupdate table
+                        if(!q.equals("no filters")) {
+                            // do query 
+                            PreparedStatement st = cn.prepareStatement(q); 
+                            if(type.equals("Other")) {
+                                st.setString(1, "!= " + username);
+                            }
+                            else {
+                                st.setString(1, "= " + username);
+                            }
+                            ResultSet rs = st.executeQuery();
+                            data.clear();
+                            set_ids.clear();
+                            table.removeAll();
+                            while(rs.next()) {
+                                data.add(new Vector<String>(Arrays.asList(rs.getString("created_by"), rs.getString("set_name"), rs.getString("set_subject"))));
+                                set_ids.add(rs.getString("set_id"));
+                            }
+                            table = new JTable(data, columnNames) {
+                                public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                                   return false;
+                                }
+                            };
+                        }
                     }
-                    // no subject filter most liked
-                    else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
-                        q = "no subject most liked";
+                    catch(SQLException l) {
+                        l.printStackTrace();
                     }
-                    // no subject filter least liked
-                    else if(subjectFilter.equals("No Filter") && likedFilter.equals("Least Liked")) {
-                        q = "no subject least liked";
-                    }
-                    //subject filter with most liked
-                    else if(likedFilter.equals("Most Liked")) {
-                        q = "subject filter most liked";
-                    }
-                    // subject filter least liked
-                    else if(likedFilter.equals("Least Liked")) {
-                        q = "subject filter least liked";
-                    }
-                    // subject filter no like filter
-                    else if(!subjectFilter.equals("No Filter")) {
-                        q = "subject no like filter";
-                    }
-                    System.out.println(q);
+
+
+                    // update table
+                    table.repaint();
                     // contactTableModel.fireTableDataChanged();
                 }
             });
