@@ -21,7 +21,7 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: fix create set, admin stats object, filter search, fix create user with no content
+    // TODO: admin stats object, filter search, fix create user with no content, how everything looks(BRANCH)
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
@@ -206,7 +206,17 @@ public class FlashStash {
         // check if user is a real user
         ResultSet rs = st.executeQuery();
         // is a user
-        if (rs.next()) {
+        if (rs.next() || username.equals("")) {
+            return true;
+        }
+        return false;
+    }
+    public boolean checkPassword(char[] password) {
+        String check = "";
+        for(int i = 0; i < password.length; i++) {
+            check += password[i];
+        }
+        if(check.equals("")) {
             return true;
         }
         return false;

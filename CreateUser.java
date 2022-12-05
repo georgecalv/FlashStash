@@ -51,6 +51,12 @@ public class CreateUser extends FlashStash{
                         userFrame.revalidate();
                         userFrame.repaint();
                     }
+                    else if(checkPassword(passInput.getPassword())) {
+                        JLabel fail = new JLabel("Invalid Password Please try again");
+                        vBox.add(fail);
+                        userFrame.revalidate();
+                        userFrame.repaint();   
+                    }
                     else {
                         String q = "INSERT INTO User Values(?,?,?,?)";
                         PreparedStatement ps = cn.prepareStatement(q);
