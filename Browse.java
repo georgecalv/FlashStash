@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.*;
 import java.awt.GridLayout;
 import java.awt.*;
+import javax.swing.table.DefaultTableModel;
 
 
 public class Browse extends FlashStash {
@@ -61,6 +62,7 @@ public class Browse extends FlashStash {
             Vector<String> subjectName = new Vector<String>();
             Vector<String> subjectCode = new Vector<String>();
             subjectName.add("No Filter");
+            subjectCode.add("No Filter");
             while(subRS.next()) {
                 subjectName.add(subRS.getString("subject_name"));
                 subjectCode.add(subRS.getString("subject_code"));
@@ -69,13 +71,6 @@ public class Browse extends FlashStash {
             Vector<String> choices = new Vector<String>(Arrays.asList("No Filter", "Most Liked", "Least Liked"));
             JComboBox likes = new JComboBox(choices);
 
-            // filter which affects the content in scroll pane
-            JButton filter = new JButton("Filter");
-            filter.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // filter scroll panel
-                }
-            });
 
             // make table
             Vector<String> columnNames = new Vector<String>(Arrays.asList("Created By", "Set Name", "Subject"));
@@ -102,6 +97,45 @@ public class Browse extends FlashStash {
             table.setFillsViewportHeight(true);
             table.setRowSelectionAllowed(true);
             table.setColumnSelectionAllowed(false);
+            // DefaultTableModel contactTableModel = (DefaultTableModel)table.getModel();
+            // filter which affects the content in scroll pane
+            JButton filter = new JButton("Filter");
+            filter.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // filter scroll panel
+                    String subjectFilter = subjectCode.get(subjectDropBox.getSelectedIndex());
+                    String likedFilter = choices.get(likes.getSelectedIndex());
+                    System.out.println(subjectFilter);
+                    System.out.println(likedFilter);
+                    String q = "";
+                    // no filters
+                    if(subjectFilter.equals("No Filter") && likedFilter.equals("No Filter")) {
+                        q = "no filters";
+                    }
+                    // no subject filter most liked
+                    else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
+                        q = "no subject most liked";
+                    }
+                    // no subject filter least liked
+                    else if(subjectFilter.equals("No Filter") && likedFilter.equals("Least Liked")) {
+                        q = "no subject least liked";
+                    }
+                    //subject filter with most liked
+                    else if(likedFilter.equals("Most Liked")) {
+                        q = "subject filter most liked";
+                    }
+                    // subject filter least liked
+                    else if(likedFilter.equals("Least Liked")) {
+                        q = "subject filter least liked";
+                    }
+                    // subject filter no like filter
+                    else if(!subjectFilter.equals("No Filter")) {
+                        q = "subject no like filter";
+                    }
+                    System.out.println(q);
+                    // contactTableModel.fireTableDataChanged();
+                }
+            });
             
 
             // study set button
