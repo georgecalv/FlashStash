@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.*;
 import java.awt.GridLayout;
+import javax.swing.table.*;
 
 
 public class Browse extends FlashStash {
@@ -15,6 +16,7 @@ public class Browse extends FlashStash {
     JTable table;
     String operator;
     JScrollPane scrollPane;
+    DefaultTableModel tableModel = null;
 
     public Browse(JFrame frame, String user, String type) {
         this.frame = frame;
@@ -90,6 +92,8 @@ public class Browse extends FlashStash {
                 }
              };
             this.scrollPane = new JScrollPane(table);
+            frame.add(scrollPane);
+
             // table.setBounds(0, 0, 300, 360);
             table.setFillsViewportHeight(true);
             table.setRowSelectionAllowed(true);
@@ -189,11 +193,8 @@ public class Browse extends FlashStash {
                             data.add(new Vector<String>(Arrays.asList(rs.getString("created_by"), rs.getString("set_name"), rs.getString("set_subject"))));
                             set_ids.add(rs.getString("set_id"));
                         }
-                        table = new JTable(data, columnNames) {
-                            public boolean editCellAt(int row, int column, java.util.EventObject e) {
-                                return false;
-                            }
-                        };
+                        tableModel = new DefaultTableModel(data, columnNames);
+                        table.setModel(tableModel);
                         
                     }
                     catch(SQLException l) {
@@ -204,10 +205,9 @@ public class Browse extends FlashStash {
                     // update table
                     table.repaint();
                     table.revalidate();
-                    scrollPane.add(table);
+                    table.doLayout();
                     frame.repaint();
                     frame.revalidate();
-                    // contactTableModel.fireTableDataChanged();
                 }
             });
             
@@ -219,9 +219,13 @@ public class Browse extends FlashStash {
                     int row = table.getSelectedRow();
                     if(row < 0) {
                         // do ntohing
+                        System.out.println("nothing");
+                        System.out.println(row);
+                        System.out.println(table.getRowCount());
                     }
                     else {
                         // int column = table.getSelectedColumn();
+                        System.out.println("select row");
                         String createdBy = data.get(row).get(0);
                         String setName = data.get(row).get(1);
                         String setcode = set_ids.get(row);
@@ -250,7 +254,7 @@ public class Browse extends FlashStash {
    
             // panel.add(scrollPane);
            
-            frame.add(scrollPane);
+            // frame.add(scrollPane);
             panel.add(subjectDropBox);
             panel.add(likes);
             panel.add(filter);
