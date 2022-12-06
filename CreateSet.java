@@ -1,3 +1,9 @@
+/**********************************************************************
+* NAME: George Calvert
+* CLASS: CPSC 321
+* DATE: 12/6/22
+* DESCRIPTION: allows a user to create a study set and add it to the database 
+**********************************************************************/
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
@@ -21,6 +27,11 @@ public class CreateSet extends FlashStash{
     JLabel title;
     JTextField name;
 
+    /*
+    Constructor for CreateSet
+    * @param frame, String of the username
+    * @return userHome object initialized
+    */
     public CreateSet(JFrame frame, String username) {
         this.frame = frame;
         this.username = username;
@@ -47,8 +58,15 @@ public class CreateSet extends FlashStash{
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
+    /**
+    displays page for creating a study set and adds it to database
+    *
+    * @param nothing
+    * @return displays gui for creating a set with options for what to do
+    */
     public void Display() {
         try {
+            // make drop down for selecting subject fo set
             String fq = "SELECT * FROM Subjects";
             PreparedStatement subs = cn.prepareStatement(fq);
             ResultSet subRS = subs.executeQuery();
@@ -66,7 +84,8 @@ public class CreateSet extends FlashStash{
             subjects.add(subjectDropBox);
             settings.add(subjects);
             content.add(settings);
-            // submit button
+
+            // submit button for subject and set name
             JButton select = new JButton("Select");
             select.addActionListener(new ActionListener() {
                 int times = 0;
@@ -98,6 +117,7 @@ public class CreateSet extends FlashStash{
             e.printStackTrace();
         }
 
+        // go back to user home page
         JButton goBack = new JButton("Go Back");
         goBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -111,12 +131,17 @@ public class CreateSet extends FlashStash{
         full.add(content);
         full.add(options);
         this.frame.add(full);
-        // JPanel upper = new JPanel();
-        // JLabel title = new JLabel("Create Set");
         this.frame.setVisible(true);
 
     }
+    /**
+    gets the questions and answers for study set and adds to database
+    *
+    * @param JComboBox, Box, Vector<String>, Vector<String>, JTextField, Jlabel
+    * @return adds question and answers to arraylist then when done submits them to database
+    */
     public void getQuestions(JComboBox subjectDropBox, Box subjects, Vector<String> subjectName, Vector<String> subjectCode, JTextField answer, JLabel answerLabel) {
+        // reset text for text field
         title.setText("Question: ");
         name.setText("Enter Text");
         subjects.removeAll();
@@ -124,6 +149,8 @@ public class CreateSet extends FlashStash{
         answer.setText("Enter Text");
         subjects.add(answerLabel);
         subjects.add(answer);
+
+        // button for when you want to submit all questions and answers
         JButton done = new JButton("Done");
         done.addActionListener(new ActionListener() {
             int times = 0;
@@ -169,7 +196,8 @@ public class CreateSet extends FlashStash{
         options.add(done);
         options.repaint();
         options.revalidate();
-        // submit question and Answer
+
+        // submit question and Answer and add another 
         JButton submit = new JButton("Submit");
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -181,13 +209,11 @@ public class CreateSet extends FlashStash{
                 options.revalidate();
                 content.repaint();
                 content.revalidate();
+                // add more questions and answers
                 getQuestions(subjectDropBox, subjects, subjectName, subjectCode, answer, answerLabel);
-                // options.repaint();
-                // options.revalidate();
-                // content.repaint();
-                // content.revalidate();
             }
         });
+        // update panel
         options.add(submit);
         options.repaint();
         options.revalidate();

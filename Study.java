@@ -1,3 +1,9 @@
+/**********************************************************************
+* NAME: George Calvert
+* CLASS: CPSC 321
+* DATE: 12/6/22
+* DESCRIPTION: Allows a user to study a certain study set
+**********************************************************************/
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.PreparedStatement;
@@ -20,6 +26,11 @@ public class Study extends FlashStash{
     JPanel options;
     JPanel back;
 
+    /*
+    Constructor for Browse
+    * @param String, String, String, JFrame, String, String
+    * @return Study object initialized
+    */
     public Study(String setCode, String createdBy, String userName, JFrame frame, String setName, String type) {
         this.userName = userName;
         this.createdBy = createdBy;
@@ -38,12 +49,20 @@ public class Study extends FlashStash{
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
+    /**
+    Displays question and answer from study set selected
+    *
+    * @param nothing
+    * @return displays gui of questions and answers for user to select what to do
+    */
     public void StartStudying() {
+        // paanels
         JPanel panel = new JPanel();
         JLabel title = new JLabel(this.createdBy + "'s " + this.setName + " Study Set");
         title.setBounds(0, 0, 100, 20);
         this.frame.add(title);
         try {
+            // query to get questions for selected study set
             String q = "SELECT question, answer FROM Content WHERE username = ? and study_set = ?";
             PreparedStatement st = super.cn.prepareStatement(q);
             st.setString(1, this.createdBy);
@@ -54,17 +73,20 @@ public class Study extends FlashStash{
             while(rs.next()) {
                 content.add(new Vector<String>(Arrays.asList(rs.getString("question"), rs.getString("answer"))));
             }
+            // puts questions and answers into table
             JTable table = new JTable(content, labels) {
                 public boolean editCellAt(int row, int column, java.util.EventObject e) {
                    return false;
                 }
              };
+            //  add to frame
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.setBounds(0, 0, 400, 200);
             table.setFillsViewportHeight(true);
             table.setRowSelectionAllowed(true);
             table.setColumnSelectionAllowed(false);
             panel.add(scrollPane);
+
             // study set button
             JButton study = new JButton("Study");
             study.addActionListener(new ActionListener() {
@@ -72,7 +94,9 @@ public class Study extends FlashStash{
                     try {
                         frame.remove(panel);
                         frame.remove(title);
+                        // create list of questions and answers
                         createFlashCards();
+                        // checks if set has content
                         if(question.size() == 0 || answer.size() == 0) {
                             JFrame sorry = new JFrame("Invalid Set");
                             JPanel p = new JPanel();
@@ -101,6 +125,7 @@ public class Study extends FlashStash{
                             
                         }
                         else {
+                            // displays flashcards
                             displayFlashCards(0);
                         }
                     }
@@ -109,29 +134,34 @@ public class Study extends FlashStash{
                     }
                 }
             });
+            // return back to browsing page
             JButton goBack = new JButton("Go Back");
             goBack.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Browse b = new Browse(frame, userName, type);
                     frame.remove(panel);
                     frame.remove(title);
-                    // frame.setLayout(new GridLayout(2, 0));
                     frame.repaint();
                     frame.revalidate();
                     b.Display();
                 }
             });
+
+            // save set button
             JButton save = new JButton("Save Set");
             save.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
+                        // check if already saved
                         if(checkAlreadyDone("Save")) {
+                            // insert that user saved set to database
                             String q = "INSERT INTO Saves VALUES (?, ?)";
                             PreparedStatement st = cn.prepareStatement(q);
                             st.setString(1, setCode);
                             st.setString(2, userName);
                             st.execute();
                         }
+                        // already saved
                         else {
                             JFrame sorry = new JFrame("Issue");
                             JPanel p = new JPanel(new GridLayout(2, 0));
@@ -149,9 +179,6 @@ public class Study extends FlashStash{
                             sorry.setLocationRelativeTo(frame);
                             sorry.setResizable(false);
                             sorry.setVisible(true);
-
-
-
                         }
                     }
                     catch(SQLException l) {
@@ -159,10 +186,12 @@ public class Study extends FlashStash{
                     }
                 }
             });
+            // like a set button
             JButton like = new JButton("Like");
             like.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
+                        // check if already liked
                         if(checkAlreadyDone("Like")) {
                             String q = "INSERT INTO Likes VALUES (?, ?)";
                             PreparedStatement st = cn.prepareStatement(q);
@@ -171,6 +200,7 @@ public class Study extends FlashStash{
                             st.execute();
        
                         }
+                        // display frame that already liked
                         else {
                             JFrame sorry = new JFrame("Issue");
                             JPanel p = new JPanel(new GridLayout(2, 0));
@@ -197,6 +227,7 @@ public class Study extends FlashStash{
         
                 }
             });
+            // add buttons
             Box b = Box.createVerticalBox();
             b.add(study);
             b.add(save);
@@ -204,12 +235,7 @@ public class Study extends FlashStash{
             b2.add(like);
             b2.add(goBack);
             panel.add(b);
-            panel.add(b2);
-            // panel.add(study);
-            // panel.add(save);
-            // panel.add(like);
-            // panel.add(goBack);
-         
+            panel.add(b2);  
         }
         catch(SQLException e) {
             System.out.println(e.getStackTrace());
@@ -219,6 +245,12 @@ public class Study extends FlashStash{
         this.frame.add(panel);
         this.frame.setVisible(true);
     }
+    /**
+    Checks if smomething is already in databse
+    *
+    * @param String of whther it is being saved or liked
+    * @return boolean of if it is used or not
+    */
     public boolean checkAlreadyDone(String type) throws SQLException {
         String q = "";
         switch(type) {
@@ -229,6 +261,7 @@ public class Study extends FlashStash{
                 q = "SELECT * FROM Saves WHERE set_id = ? AND username = ?";
                 break;
         }
+        // execute query
         PreparedStatement st = cn.prepareStatement(q);
         st.setString(1, this.setCode);
         st.setString(2, this.userName);
@@ -238,10 +271,17 @@ public class Study extends FlashStash{
         }
         return true;
     }
+    /**
+    Gets all content from set and adds it to arraylists
+    *
+    * @param nothing
+    * @return arraylists of questions and answers are initialized and filled
+    */
     public void createFlashCards() throws SQLException{
-        // query
         this.question = new ArrayList<String>();
         this.answer = new ArrayList<String>();
+
+        // query
         String q = "SELECT * FROM Content WHERE study_set = ?";
         PreparedStatement st = cn.prepareStatement(q);
         st.setString(1, setCode);
@@ -251,14 +291,23 @@ public class Study extends FlashStash{
             this.answer.add(rs.getString("answer"));
         }  
     }
+    /**
+    displays flashcards for user to go through
+    *
+    * @param int of the index the user is at
+    * @return displays flashcards to user in GUI
+    */
     public void displayFlashCards(int start) {
+        // gets question
         JLabel tmp = new JLabel(this.question.get(start));
         tmp.setFont((new Font("Serif", Font.PLAIN, 16)));
         this.flashcard.add(tmp);
+        // show answer or question
         JButton show = new JButton("Display Answer");
         show.addActionListener(new ActionListener() {
             int time = 1;
             public void actionPerformed(ActionEvent e) {
+                // swithces from display answer to display question for index
                 if(time % 2 == 0) {
                     tmp.setText(question.get(start));
                     show.setText("Display Answer");
@@ -273,11 +322,13 @@ public class Study extends FlashStash{
                 flashcard.revalidate();
             }
         });
+        // goes to next question
         JButton next = new JButton("Next Question");
         next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 flashcard.removeAll();
                 options.removeAll();
+                // checks if at end of arraylist
                 if(start == question.size() - 1) {
                     displayFlashCards(0);
                 }
@@ -287,25 +338,26 @@ public class Study extends FlashStash{
             }
         });
         options.add(next);
+
+        // go back to browsing page
         JButton goBack = new JButton("Go Back");
         goBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Browse b = new Browse(frame, userName, type);
                 flashcard.removeAll();
-                options.removeAll();
-                // frame.setLayout(new GridLayout(2, 0));
+                options.removeAll();;
                 frame.repaint();
                 frame.revalidate();
                 b.Display();
             }
         });
-        // this.flashcard.setBackground(Color.GRAY);
+
+        // frame settings
         this.flashcard.setBounds(0,0,600,180);
         this.options.add(show);
         this.options.add(goBack);
         this.flashFrame.add(this.flashcard);
         this.flashFrame.add(this.options);
-        // this.flashFrame.add(this.back);
         this.flashFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.flashFrame.setSize(600,360);
         this.flashFrame.setLocationRelativeTo(null);

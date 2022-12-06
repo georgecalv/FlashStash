@@ -1,3 +1,10 @@
+/**********************************************************************
+* NAME: George Calvert
+* CLASS: CPSC 321
+* DATE: 12/6/22
+* DESCRIPTION: displays sets and allows user to filter and select sets 
+*              to study, save, and like
+**********************************************************************/
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -18,6 +25,11 @@ public class Browse extends FlashStash {
     JScrollPane scrollPane;
     DefaultTableModel tableModel = null;
 
+    /*
+    Constructor for Browse
+    * @param frame, String of the username, type of browsing
+    * @return Browse object initialized
+    */
     public Browse(JFrame frame, String user, String type) {
         this.frame = frame;
         this.username = user;
@@ -28,6 +40,12 @@ public class Browse extends FlashStash {
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true); 
     }
+    /**
+    displays page of sets for user to browse through
+    *
+    * @param nothing
+    * @return displays gui of study sets to browse filter and select
+    */
     public void Display() {
         JPanel panel = new JPanel();
         JPanel leftPanel = new JPanel();
@@ -36,6 +54,7 @@ public class Browse extends FlashStash {
         this.frame.add(panel);
         String q = "";
 
+        // changes query based on type of browsing
         switch(this.type) {
             case "Own":
                 q = "SELECT created_by, set_name, set_subject, set_id FROM StudySet WHERE created_by = ?";
@@ -50,10 +69,6 @@ public class Browse extends FlashStash {
         }
         // get table of sets 
         try {
-            // JLabel title = new JLabel("Browse " + this.type + " Sets:");
-            // leftPanel.add(title);
-
-
             // Filter settings
             String fq = "SELECT * FROM Subjects";
             PreparedStatement subs = cn.prepareStatement(fq);
@@ -62,16 +77,19 @@ public class Browse extends FlashStash {
             Vector<String> subjectCode = new Vector<String>();
             subjectName.add("No Filter");
             subjectCode.add("No Filter");
+
             while(subRS.next()) {
                 subjectName.add(subRS.getString("subject_name"));
                 subjectCode.add(subRS.getString("subject_code"));
             }
+
+            // drop down for type of filter
             JComboBox subjectDropBox = new JComboBox(subjectName);
             Vector<String> choices = new Vector<String>(Arrays.asList("No Filter", "Most Liked", "Least Liked"));
             JComboBox likes = new JComboBox(choices);
 
 
-            // make table
+            // make table for sets
             Vector<String> columnNames = new Vector<String>(Arrays.asList("Created By", "Set Name", "Subject"));
             Vector<Vector<String>> data = new Vector<Vector<String>>();
             Vector<String> set_ids = new Vector<String>();
@@ -93,12 +111,10 @@ public class Browse extends FlashStash {
              };
             this.scrollPane = new JScrollPane(table);
             frame.add(scrollPane);
-
-            // table.setBounds(0, 0, 300, 360);
             table.setFillsViewportHeight(true);
             table.setRowSelectionAllowed(true);
             table.setColumnSelectionAllowed(false);
-            // DefaultTableModel contactTableModel = (DefaultTableModel)table.getModel();
+
             // filter which affects the content in scroll pane
             JButton filter = new JButton("Filter");
             filter.addActionListener(new ActionListener() {
@@ -110,6 +126,7 @@ public class Browse extends FlashStash {
                         System.out.println(subjectFilter);
                         System.out.println(likedFilter);
                         String q = "";
+
                         // no filters
                         if(subjectFilter.equals("No Filter") && likedFilter.equals("No Filter")) {
                             switch(type) {
@@ -125,6 +142,7 @@ public class Browse extends FlashStash {
                         }
                         // no subject filter most liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
+                            // for non saved sets by user
                             if(type != "Saved") {
                                 q = "WITH most_liked AS(" +
                                 "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
@@ -137,6 +155,7 @@ public class Browse extends FlashStash {
                                 "FROM most_liked " +
                                 "WHERE created_by " + operator + " ?";
                             }
+                            // saved sets for user
                             else {
                                 q = "WITH most_liked AS ( " +
                                     "select set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
@@ -289,13 +308,14 @@ public class Browse extends FlashStash {
                         frame.remove(panel);
                         frame.repaint();
                         frame.revalidate();
+                        // goes to study landing page for set
                         Study st = new Study(setcode, createdBy, username, frame, setName, type);
                         st.StartStudying();
                     }
 
                 }
             });
-
+            // return back to userhome page
             JButton goBack = new JButton("Go Back");
             goBack.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {

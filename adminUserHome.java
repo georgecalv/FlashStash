@@ -1,3 +1,9 @@
+/**********************************************************************
+* NAME: George Calvert
+* CLASS: CPSC 321
+* DATE: 12/6/22
+* DESCRIPTION: admin homepage to display stats for entire database 
+**********************************************************************/
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -16,13 +22,27 @@ public class adminUserHome {
     String username;
     JScrollPane info;
 
+    /*
+    Constructor for adminUserHome
+    * @param frame, String of the username
+    * @return adminUser object initialized
+    */
     public adminUserHome(JFrame frame, String username) {
         this.frame = frame;
         this.frame.setLayout(new GridLayout(2, 0));
         this.username = username;
     }
+    /**
+    displays page of stats for entire database
+    *
+    * @param nothing
+    * @return displays gui of stats and options to display other stast
+    */
     public void display() {
+        // display stat first
         displayInfo();
+
+        // panels
         JPanel panel = new JPanel();
         JPanel buttons = new JPanel(new GridLayout(5, 0));
 
@@ -39,6 +59,7 @@ public class adminUserHome {
                 lo.LogIn();
             }
         });
+        // dbutton to display list of active users based on sets created
         JButton activeUsers = new JButton("Display Active Users");
         activeUsers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -96,6 +117,7 @@ public class adminUserHome {
 
             }
         });
+        // display sets that have the most saves by other users
         JButton popSets = new JButton("Most Popular Sets");
         popSets.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -151,6 +173,7 @@ public class adminUserHome {
                 frame.revalidate();
             }
         });
+        // display users who hav eliked the most things
         JButton mostLikes = new JButton("Users who like the most");
         mostLikes.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -205,6 +228,7 @@ public class adminUserHome {
                 frame.revalidate();
             }
         });
+        // display all users info in database
         JButton displayUsers = new JButton("Display User Info");
         displayUsers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -265,15 +289,13 @@ public class adminUserHome {
         this.frame.add(panel);
         this.frame.repaint();
         this.frame.revalidate();
-
-
-        // frame settings
-        // this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // this.frame.setSize(600,360);
-        // this.frame.setLayout(new GridLayout(3, 0));
-        // this.frame.setLocationRelativeTo(null);
-        // this.frame.setVisible(true); 
     }
+    /**
+    displays table of the total number of users, sets, and number of questions
+    *
+    * @param nothing
+    * @return displays table of stats
+    */
     public void displayInfo() {
         Vector<String> columnNames = new Vector<String>(Arrays.asList("Number Users", "Number Sets", "Number Questions/Answers"));
         Vector<Vector<Integer>> data = new Vector<Vector<Integer>>();
@@ -306,6 +328,7 @@ public class adminUserHome {
                     return false;
                 }
             };
+            // show table
             this.info = new JScrollPane(table);
             table.setFillsViewportHeight(true);
             table.setRowSelectionAllowed(false);
@@ -318,14 +341,23 @@ public class adminUserHome {
 
 
     }
-    // get connection
+    /**
+    Establishes connetion to database
+    *
+    * @param nothing
+    * @return Connection to database variable
+    */
     public Connection getConnection() throws SQLException {
         String[] connection = getUrl(); 
         Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
         return cn;
     } 
-
-    // get url
+    /**
+    Gets the url for connecting to the database
+    *
+    * @param nothing
+    * @return String array conatining info for connecting to database
+    */
     public String[] getUrl() {
             String hst, usr, pwd, dab, url;
             String result[] = new String[5];

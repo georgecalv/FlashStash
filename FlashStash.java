@@ -1,3 +1,10 @@
+/**********************************************************************
+* NAME: George Calvert
+* CLASS: CPSC 321
+* DATE: 12/6/22
+* DESCRIPTION: A application for users to create and share Study Sets
+*              with users. Allowing them to like save and create sets 
+**********************************************************************/
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.FileInputStream;
@@ -17,6 +24,10 @@ public class FlashStash {
 
     // TODO: how everything looks(BRANCH), comment,
 
+    /*
+    Constructor for Flash Stash
+    * @return intializes a connection to the database
+    */
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
         try {
@@ -26,14 +37,19 @@ public class FlashStash {
             System.out.println(e.getStackTrace());
         }
     }
-    // log into FlashStash
+    
+    /**
+    Allows a user to log in or create an account for FlashStash
+    *
+    * @param nothing
+    * @return displays gui and allows user to sign in or create an account
+    */
     public void LogIn() {
         login  = new JPanel();
         login.setAlignmentY(SwingConstants.CENTER);
         this.frame.add(login);
         Box input = Box.createVerticalBox();
-        // JLabel userLabel = new JLabel("Username: ");
-        // JLabel passLabel = new JLabel("Password: ");
+        //username and password
         JFormattedTextField user = new JFormattedTextField();
         user.setEditable(true);
         JPasswordField pass = new JPasswordField();
@@ -42,7 +58,7 @@ public class FlashStash {
         input.add(pass);
         login.add(input);
 
-        // insert button
+        // log in button button
         JButton go = new JButton("Log in");
         go.addActionListener(new ActionListener() {
             // check user info user info
@@ -52,7 +68,9 @@ public class FlashStash {
                     login.removeAll();
                     login.revalidate();
                     login.repaint();
+                    // checks if user is admin
                     if(user.getText().equals("admin") && pass.getPassword()[0] == 'a') {
+                        // goes to admin home page
                         adminUserHome adminHomePg = new adminUserHome(frame, user.getText());
                         adminHomePg.display();
                         frame.remove(login);
@@ -60,7 +78,9 @@ public class FlashStash {
                         frame.revalidate();
 
                     }
+                    // not admin
                     else {
+                        // user home page
                         userHome homePg = new userHome(frame, user.getText());
                         homePg.Display();
                         frame.remove(login);
@@ -82,8 +102,10 @@ public class FlashStash {
                 }
             }
         });
+        // create new user button
         JButton newUser = new JButton("Create New User");
         newUser.addActionListener(new ActionListener() {
+            // goes to create user page
             public void actionPerformed(ActionEvent e) {
                 login.removeAll();
                 login.revalidate();
@@ -96,6 +118,7 @@ public class FlashStash {
                 frame.revalidate();   
             }
         });
+        // adding
         input.add(go);
         input.add(newUser);
         input.setAlignmentX(SwingConstants.CENTER);
@@ -111,14 +134,25 @@ public class FlashStash {
         this.frame.setVisible(true); 
 
     }
-    // get connection
+    
+    /**
+    Establishes connetion to database
+    *
+    * @param nothing
+    * @return Connection to database variable
+    */
     public Connection getConnection() throws SQLException {
         String[] connection = getUrl(); 
         Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
         return cn;
     } 
 
-    // get url
+    /**
+    Gets the url for connecting to the database
+    *
+    * @param nothing
+    * @return String array conatining info for connecting to database
+    */
     public String[] getUrl() {
             String hst, usr, pwd, dab, url;
             String result[] = new String[5];
@@ -152,6 +186,13 @@ public class FlashStash {
             }
             return result;
     }
+    
+    /**
+    Checks if the user and passwrod is correct
+    *
+    * @param string of user name, char arrya of the password
+    * @return boolean of whther the username and password is correct or not
+    */
     private boolean checkUsername(String username, char[] password) {
         try {
             String q = "SELECT username FROM User WHERE username = ?";
@@ -171,6 +212,7 @@ public class FlashStash {
                 st = cn.prepareStatement(q);
                 st.setString(1, username);
                 rs = st.executeQuery();
+                // check password
                 if(rs.next()) {
                     String actual = rs.getString("pass");
                     if(actual.equals(tmp)) {
@@ -193,6 +235,13 @@ public class FlashStash {
             return false;
         }
     }
+    
+    /**
+    check username is blank
+    *
+    * @param String containg the username
+    * @return boolean of whether it is a username or not
+    */
     public boolean checkUsername(String username) throws SQLException {
         String q = "SELECT username FROM User WHERE username = ?";
         PreparedStatement st = cn.prepareStatement(q);
@@ -205,6 +254,13 @@ public class FlashStash {
         }
         return false;
     }
+    
+    /**
+    checks passwrord isnt blank
+    *
+    * @param char[] of the password
+    * @return boolean of if it matches or not
+    */
     public boolean checkPassword(char[] password) {
         String check = "";
         for(int i = 0; i < password.length; i++) {
