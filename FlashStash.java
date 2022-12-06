@@ -21,8 +21,7 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: admin stats object, how everything looks(BRANCH), 
-    // like button
+    // TODO: admin stats object, how everything looks(BRANCH)
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
