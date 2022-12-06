@@ -15,8 +15,7 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: how everything looks(BRANCH), fix filter for saved browsing, comment, 
-    // bug where select doesnt work after filtering
+    // TODO: how everything looks(BRANCH), fix filter for saved browsing, comment,
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
@@ -26,14 +25,6 @@ public class FlashStash {
         catch(SQLException e) {
             System.out.println(e.getStackTrace());
         }
-
-        // // frame settings
-        // this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // // this.frame.setLayout(new Boxlayout());
-        // this.frame.setSize(600,360);
-        // this.frame.setLocationRelativeTo(null);
-        // this.frame.setResizable(false);
-        // this.frame.setVisible(true); 
     }
     // log into FlashStash
     public void LogIn() {
