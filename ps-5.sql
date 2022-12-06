@@ -7,8 +7,8 @@
 --  **********************************************************************/
 
 -- -- Question 1
--- SELECT set_id, created_by, username AS saved_by
--- FROM Saves RIGHT OUTER JOIN StudySet USING(set_id);
+SELECT set_id, created_by, username AS saved_by
+FROM Saves RIGHT OUTER JOIN StudySet USING(set_id);
 -- -- This query is interesting since it returns all sets in the database but leaves a NULL value 
 -- -- in created by if a set is not saved by another user
 
