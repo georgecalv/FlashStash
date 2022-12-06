@@ -95,11 +95,63 @@ public class adminUserHome {
 
             }
         });
-        JButton moreStats = new JButton("More stats");
+        JButton popSets = new JButton("Most Popular Sets");
+        popSets.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Vector<String> columnNames = new Vector<String>(Arrays.asList("Set Name", "Created By", "Number Saves"));
+                Vector<Vector<String>> data = new Vector<Vector<String>>();
+                String q = "SELECT set_name, created_by, COUNT(*) AS number_saves " +
+                            "FROM StudySet JOIN Saves USING(set_id) " +
+                            "GROUP BY set_id " +
+                            "HAVING number_saves >= 2 " +
+                            "ORDER BY number_saves DESC";
+                try {
+                    Connection cn = getConnection();
+                    PreparedStatement st = cn.prepareStatement(q);
+                    ResultSet rs = st.executeQuery(q);
+                    while(rs.next()) {
+                        data.add(new Vector<String>(Arrays.asList(rs.getString("set_name"), rs.getString("created_by"),rs.getString("number_saves"))));
+                    }
+                } 
+                catch(SQLException l) {
+                    l.printStackTrace();
+                }  
+                JTable table = new JTable(data, columnNames) {
+                    public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                        return false;
+                    }
+                };
+                JScrollPane scrollPane = new JScrollPane(table);
+                table.setFillsViewportHeight(true);
+                table.setRowSelectionAllowed(true);
+                table.setColumnSelectionAllowed(false);
+                
+                panel.remove(buttons);
+                frame.remove(panel);
+                frame.add(scrollPane);
+                frame.add(panel);
+
+                JButton goBack = new JButton("Go Back");
+                goBack.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        frame.remove(panel);
+                        frame.remove(scrollPane);
+                        display();
+                        frame.repaint();
+                        frame.revalidate();
+                    }
+                });
+                panel.add(goBack);
+                panel.repaint();
+                panel.revalidate();
+                frame.repaint();
+                frame.revalidate();
+            }
+        });
 
         buttons.add(logout);
         buttons.add(activeUsers);
-        buttons.add(moreStats);
+        buttons.add(popSets);
         panel.add(buttons);
         this.frame.add(panel);
         this.frame.repaint();
