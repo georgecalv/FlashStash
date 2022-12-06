@@ -124,8 +124,55 @@ public class Study extends FlashStash{
                     b.Display();
                 }
             });
-            panel.add(study);
-            panel.add(goBack);
+            JButton save = new JButton("Save Set");
+            save.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        if(checkAlreadyDone("Save")) {
+                            String q = "INSERT INTO Saves VALUES (?, ?)";
+                            PreparedStatement st = cn.prepareStatement(q);
+                            st.setString(1, setCode);
+                            st.setString(2, userName);
+                            st.execute();
+                        }
+                    }
+                    catch(SQLException l) {
+                        l.printStackTrace();
+                    }
+                }
+            });
+            JButton like = new JButton("Like");
+            like.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        if(checkAlreadyDone("Like")) {
+                            String q = "INSERT INTO Likes VALUES (?, ?)";
+                            PreparedStatement st = cn.prepareStatement(q);
+                            st.setString(1, setCode);
+                            st.setString(2, userName);
+                            st.execute();
+       
+                        }
+                    }
+                    catch(SQLException l) {
+                        l.printStackTrace();
+                    }
+                    
+        
+                }
+            });
+            Box b = Box.createVerticalBox();
+            b.add(study);
+            b.add(save);
+            Box b2 = Box.createVerticalBox();
+            b2.add(like);
+            b2.add(goBack);
+            panel.add(b);
+            panel.add(b2);
+            // panel.add(study);
+            // panel.add(save);
+            // panel.add(like);
+            // panel.add(goBack);
          
         }
         catch(SQLException e) {
@@ -135,6 +182,25 @@ public class Study extends FlashStash{
         panel.revalidate();
         this.frame.add(panel);
         this.frame.setVisible(true);
+    }
+    public boolean checkAlreadyDone(String type) throws SQLException {
+        String q = "";
+        switch(type) {
+            case "Like":
+                q = "SELECT * FROM Likes WHERE set_id = ? AND username = ?";
+                break;
+            case "Save":
+                q = "SELECT * FROM Likes WHERE set_id = ? AND username = ?";
+                break;
+        }
+        PreparedStatement st = cn.prepareStatement(q);
+        st.setString(1, this.setCode);
+        st.setString(2, this.userName);
+        ResultSet rs = st.executeQuery();
+        if(rs.next()) {
+            return false;
+        }
+        return true;
     }
     public void createFlashCards() throws SQLException{
         // query

@@ -21,8 +21,8 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: admin stats object, filter search, how everything looks(BRANCH), 
-    // fix not selecting set and hitting select button, like button
+    // TODO: admin stats object, how everything looks(BRANCH), 
+    // like button
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");

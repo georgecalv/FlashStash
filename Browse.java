@@ -255,8 +255,7 @@ public class Browse extends FlashStash {
                     homePg.Display();
                 }
             });
-
-    
+   
             // panel.add(scrollPane);
            
             frame.add(scrollPane);
