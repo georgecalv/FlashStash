@@ -100,6 +100,7 @@ public class userHome extends FlashStash{
                 frame.remove(upperPanel);
                 frame.remove(lowerPanel);
                 FlashStash lo = new FlashStash();
+                frame.dispose();
                 lo.LogIn();
             }
         });

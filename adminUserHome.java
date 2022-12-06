@@ -20,6 +20,7 @@ public class adminUserHome {
 
     public adminUserHome(JFrame frame, String username) {
         this.frame = frame;
+        this.frame.setLayout(new GridLayout(2, 0));
         this.username = username;
     }
     public void display() {
@@ -67,18 +68,21 @@ public class adminUserHome {
                     table.setColumnSelectionAllowed(false);
                     
                     panel.remove(buttons);
-                    panel.add(scrollPane);
+                    frame.remove(panel);
+                    frame.add(scrollPane);
+                    frame.add(panel);
 
                     JButton goBack = new JButton("Go Back");
                     goBack.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             frame.remove(panel);
+                            frame.remove(scrollPane);
                             display();
                             frame.repaint();
                             frame.revalidate();
                         }
                     });
-                    // panel.add(goBack);
+                    panel.add(goBack);
                     panel.repaint();
                     panel.revalidate();
                     frame.repaint();

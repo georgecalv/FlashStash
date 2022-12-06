@@ -104,6 +104,7 @@ public class FlashStash {
                 login.revalidate();
                 login.repaint();
                 CreateUser user = new CreateUser();
+                frame.dispose();
                 user.display(); 
                 frame.remove(login);
                 frame.repaint();
