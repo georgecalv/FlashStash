@@ -33,13 +33,13 @@ public class FlashStash {
             System.out.println(e.getStackTrace());
         }
 
-        // frame settings
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // this.frame.setLayout(new Boxlayout());
-        this.frame.setSize(600,360);
-        this.frame.setLocationRelativeTo(null);
-        this.frame.setResizable(false);
-        this.frame.setVisible(true); 
+        // // frame settings
+        // this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // // this.frame.setLayout(new Boxlayout());
+        // this.frame.setSize(600,360);
+        // this.frame.setLocationRelativeTo(null);
+        // this.frame.setResizable(false);
+        // this.frame.setVisible(true); 
     }
     // log into FlashStash
     public void LogIn() {
@@ -67,11 +67,21 @@ public class FlashStash {
                     login.removeAll();
                     login.revalidate();
                     login.repaint();
-                    userHome homePg = new userHome(frame, user.getText());
-                    homePg.Display();
-                    frame.remove(login);
-                    frame.repaint();
-                    frame.revalidate();
+                    if(user.getText().equals("admin") && pass.getPassword()[0] == 'a') {
+                        adminUserHome adminHomePg = new adminUserHome(frame, user.getText());
+                        adminHomePg.display();
+                        frame.remove(login);
+                        frame.repaint();
+                        frame.revalidate();
+
+                    }
+                    else {
+                        userHome homePg = new userHome(frame, user.getText());
+                        homePg.Display();
+                        frame.remove(login);
+                        frame.repaint();
+                        frame.revalidate();
+                    }
                 }
                 // not a user
                 else {
@@ -105,22 +115,19 @@ public class FlashStash {
         input.setAlignmentX(SwingConstants.CENTER);
         login.revalidate();
         login.repaint();
+        
+        // frame settings
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.frame.setLayout(new Boxlayout());
+        this.frame.setSize(600,360);
+        this.frame.setLocationRelativeTo(null);
+        this.frame.setResizable(false);
+        this.frame.setVisible(true); 
 
     }
     // get connection
     public Connection getConnection() throws SQLException {
         String[] connection = getUrl(); 
-        // connect to database
-        // try {
-        //     Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
-        //     return cn;
-            
-        // }
-        // catch(SQLException e) {
-        //     e.getStackTrace();
-        //     System.out.println("Connection Error");
-            
-        // }
         Connection cn = DriverManager.getConnection(connection[4], connection[1], connection[2]);
         return cn;
     } 

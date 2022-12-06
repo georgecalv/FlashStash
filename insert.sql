@@ -29,7 +29,8 @@ INSERT INTO User VALUES("gcalvert", "1234", "George", "Calvert"),
                         ("smoothcriminal", "CS55", "Carlos", "Sainz"),
                         ("theHulk", "nicooooooo", "Nico", "Hulkenburg"),
                         ("sebbie", "ferrarisucks", "Sebastian", "Vettel"),
-                        ("jSmith", "4321", "John", "Smith");
+                        ("jSmith", "4321", "John", "Smith"),
+                        ("admin", "adminpassword", "admin", "admin");
 INSERT INTO Subjects VALUES("MA", "Math"),
                     ("SC", "Science"),
                     ("LI", "Literature"),
