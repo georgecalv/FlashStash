@@ -1,8 +1,5 @@
-// import java.util.ArrayList;
 import java.awt.event.*;
 import javax.swing.*;
-// import java.awt.Image;
-// import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,18 +7,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-// import java.sql.Statement;
 import java.util.Properties;
 import java.sql.PreparedStatement;
-// import java.awt.Container;
-// import java.awt.*;
 
 public class FlashStash {
     JFrame frame;
     Connection cn;
     JPanel login;
 
-    // TODO: how everything looks(BRANCH), fix filter for saved browsing, comment
+    // TODO: how everything looks(BRANCH), fix filter for saved browsing, comment, 
+    // bug where select doesnt work after filtering
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
