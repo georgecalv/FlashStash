@@ -33,15 +33,15 @@ FROM Saves RIGHT OUTER JOIN StudySet USING(set_id);
 -- -- This query is interesting since it changes the null values to more readable values like saved or not saved
 -- -- if a study set tat is created by a user is svaed by another user
 
--- Question 4
-WITH number_created AS(
-    SELECT username, COUNT(*) AS number_sets
-    FROM User JOIN StudySet ON(created_by = username)
-    GROUP BY username
-    ORDER BY number_sets DESC
-)
-SELECT username, number_sets, DENSE_RANK() OVER (ORDER BY number_sets DESC) AS rank
-FROM number_created;
+-- -- Question 4
+-- WITH number_created AS(
+--     SELECT username, COUNT(*) AS number_sets
+--     FROM User JOIN StudySet ON(created_by = username)
+--     GROUP BY username
+--     ORDER BY number_sets DESC
+-- )
+-- SELECT username, number_sets, DENSE_RANK() OVER (ORDER BY number_sets DESC) AS rank
+-- FROM number_created;
 -- This query is interesting since it ranks the users based on the number of study sets they have created/
 -- For instance rank 1 has the most sets and then descending down
 
@@ -58,4 +58,12 @@ FROM number_created;
 -- -- This query is interesting since it ranks the sets based on the number of saves each one has.
 -- -- For example sets with the most saves would have rank 1. This allows me to rank the sets for users
 -- -- for the most used sets.
+WITH most_liked AS (
+    select set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes 
+    FROM StudySet JOIN Likes USING(set_id) 
+    GROUP BY set_id HAVING number_likes >= 1 
+    ORDER BY number_likes DESC) 
+SELECT m.created_by, m.set_name, m.set_subject, m.set_id 
+FROM most_liked m JOIN Saves s ON(m.set_id = s.set_id) 
+WHERE s.username = 'gcalvert';
 

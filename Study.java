@@ -132,6 +132,27 @@ public class Study extends FlashStash{
                             st.setString(2, userName);
                             st.execute();
                         }
+                        else {
+                            JFrame sorry = new JFrame("Issue");
+                            JPanel p = new JPanel(new GridLayout(2, 0));
+                            p.add(new JLabel("Sorry you have already Saved this set"));
+                            JButton close = new JButton("Close");
+                            close.addActionListener(new ActionListener() {
+                                public void actionPerformed(ActionEvent e) {
+                                    sorry.dispose();
+                                }
+                            });
+                            p.add(close);
+                            sorry.add(p);
+                            sorry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            sorry.setSize(300,100);
+                            sorry.setLocationRelativeTo(frame);
+                            sorry.setResizable(false);
+                            sorry.setVisible(true);
+
+
+
+                        }
                     }
                     catch(SQLException l) {
                         l.printStackTrace();
@@ -149,6 +170,24 @@ public class Study extends FlashStash{
                             st.setString(2, userName);
                             st.execute();
        
+                        }
+                        else {
+                            JFrame sorry = new JFrame("Issue");
+                            JPanel p = new JPanel(new GridLayout(2, 0));
+                            p.add(new JLabel("Sorry you have already Liked this set"));
+                            JButton close = new JButton("Close");
+                            close.addActionListener(new ActionListener() {
+                                public void actionPerformed(ActionEvent e) {
+                                    sorry.dispose();
+                                }
+                            });
+                            p.add(close);
+                            sorry.add(p);
+                            sorry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            sorry.setSize(300,100);
+                            sorry.setLocationRelativeTo(frame);
+                            sorry.setResizable(false);
+                            sorry.setVisible(true);
                         }
                     }
                     catch(SQLException l) {
@@ -187,7 +226,7 @@ public class Study extends FlashStash{
                 q = "SELECT * FROM Likes WHERE set_id = ? AND username = ?";
                 break;
             case "Save":
-                q = "SELECT * FROM Likes WHERE set_id = ? AND username = ?";
+                q = "SELECT * FROM Saves WHERE set_id = ? AND username = ?";
                 break;
         }
         PreparedStatement st = cn.prepareStatement(q);

@@ -125,7 +125,8 @@ public class Browse extends FlashStash {
                         }
                         // no subject filter most liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Most Liked")) {
-                            q = "WITH most_liked AS(" +
+                            if(type != "Saved") {
+                                q = "WITH most_liked AS(" +
                                 "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
                                 "FROM StudySet JOIN Likes USING(set_id) " +
                                 "GROUP BY set_id " +
@@ -135,51 +136,106 @@ public class Browse extends FlashStash {
                                 "SELECT created_by, set_name, set_subject, set_id " +
                                 "FROM most_liked " +
                                 "WHERE created_by " + operator + " ?";
+                            }
+                            else {
+                                q = "WITH most_liked AS ( " +
+                                    "select set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id HAVING number_likes >= 1 " + 
+                                    "ORDER BY number_likes DESC) " +
+                                "SELECT m.created_by, m.set_name, m.set_subject, m.set_id " +
+                                "FROM most_liked m JOIN Saves s ON(m.set_id = s.set_id) " +
+                                "WHERE s.username = ?"; 
+                            }
                         }
                         // no subject filter least liked
                         else if(subjectFilter.equals("No Filter") && likedFilter.equals("Least Liked")) {
-                            q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
-                                "FROM StudySet JOIN Likes USING(set_id) " +
-                                "GROUP BY set_id " +
-                                "HAVING number_likes >= 1 " +
-                                "ORDER BY number_likes " +
-                                ") " + 
-                                "SELECT created_by, set_name, set_subject, set_id " +
-                                "FROM most_liked " +
-                                "WHERE created_by " + operator + " ?";
+                            if(type != "Saved") {
+                                q = "WITH most_liked AS(" +
+                                    "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id " +
+                                    "HAVING number_likes >= 1 " +
+                                    "ORDER BY number_likes " +
+                                    ") " + 
+                                    "SELECT created_by, set_name, set_subject, set_id " +
+                                    "FROM most_liked " +
+                                    "WHERE created_by " + operator + " ?";
+                            }
+                            else {
+                                q = "WITH most_liked AS ( " +
+                                    "select set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id HAVING number_likes >= 1 " + 
+                                    "ORDER BY number_likes " +
+                                    ") " +
+                                "SELECT m.created_by, m.set_name, m.set_subject, m.set_id " +
+                                "FROM most_liked m JOIN Saves s ON(m.set_id = s.set_id) " +
+                                "WHERE s.username = ?"; 
+                            }
                         }
                         //subject filter with most liked
                         else if(likedFilter.equals("Most Liked")) {
-                            q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
-                                "FROM StudySet JOIN Likes USING(set_id) " +
-                                "GROUP BY set_id " +
-                                "HAVING number_likes >= 1 " +
-                                "ORDER BY number_likes DESC " +
-                                ") " + 
-                                "SELECT created_by, set_name, set_subject, set_id " +
-                                "FROM most_liked " +
-                                "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";
+                            if(type != "Saved") {
+                                q = "WITH most_liked AS(" +
+                                    "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id " +
+                                    "HAVING number_likes >= 1 " +
+                                    "ORDER BY number_likes DESC " +
+                                    ") " + 
+                                    "SELECT created_by, set_name, set_subject, set_id " +
+                                    "FROM most_liked " +
+                                    "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";
+                            }
+                            else {
+                                q = "WITH most_liked AS ( " +
+                                    "select set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id HAVING number_likes >= 1 " + 
+                                    "ORDER BY number_likes DESC) " +
+                                "SELECT m.created_by, m.set_name, m.set_subject, m.set_id " +
+                                "FROM most_liked m JOIN Saves s ON(m.set_id = s.set_id) " +
+                                "WHERE s.username = ? AND m.set_subject = '" + subjectFilter + "'";                              
+                            }
                         }
                         // subject filter least liked
                         else if(likedFilter.equals("Least Liked")) {
-                            q = "WITH most_liked AS(" +
-                                "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
-                                "FROM StudySet JOIN Likes USING(set_id) " +
-                                "GROUP BY set_id " +
-                                "HAVING number_likes >= 1 " +
-                                "ORDER BY number_likes " +
-                                ") " + 
-                                "SELECT created_by, set_name, set_subject, set_id " +
-                                "FROM most_liked " +
-                                "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";;
+                            if(type != "Saved") {
+                                q = "WITH most_liked AS(" +
+                                    "SELECT set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id " +
+                                    "HAVING number_likes >= 1 " +
+                                    "ORDER BY number_likes " +
+                                    ") " + 
+                                    "SELECT created_by, set_name, set_subject, set_id " +
+                                    "FROM most_liked " +
+                                    "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";
+                            }
+                            else {
+                                q = "WITH most_liked AS ( " +
+                                    "select set_name, created_by, set_id, set_subject, COUNT(*) AS number_likes " +
+                                    "FROM StudySet JOIN Likes USING(set_id) " +
+                                    "GROUP BY set_id HAVING number_likes >= 1 " + 
+                                    "ORDER BY number_likes) " +
+                                "SELECT m.created_by, m.set_name, m.set_subject, m.set_id " +
+                                "FROM most_liked m JOIN Saves s ON(m.set_id = s.set_id) " +
+                                "WHERE s.username = ? AND m.set_subject = '" + subjectFilter + "'";                                    
+                            }
                         }
                         // subject filter no like filter
                         else if(!subjectFilter.equals("No Filter")) {
-                            q = "SELECT created_by, set_name, set_subject, set_id " +
-                                "FROM StudySet " +
-                                "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";;
+                            if(type != "Saved") {
+                                q = "SELECT created_by, set_name, set_subject, set_id " +
+                                    "FROM StudySet " +
+                                    "WHERE created_by " + operator + " ? AND set_subject = '" + subjectFilter + "'";
+                            }
+                            else {
+                                q = "SELECT s.created_by, s.set_name, s.set_subject, s.set_id " +
+                                    "FROM StudySet s JOIN Saves sa ON(s.set_id = sa.set_id)" +
+                                    "WHERE sa.username = ? AND s.set_subject = '" + subjectFilter + "'";     
+                            }
                         }
 
                         // do query 
