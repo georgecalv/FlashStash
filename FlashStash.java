@@ -22,7 +22,7 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: how everything looks(BRANCH), comment,
+    // TODO: how everything looks(BRANCH)
 
     /*
     Constructor for Flash Stash
