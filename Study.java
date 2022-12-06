@@ -1,7 +1,4 @@
 import javax.swing.*;
-
-import com.mysql.cj.protocol.Resultset;
-
 import java.awt.event.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

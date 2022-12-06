@@ -1,10 +1,7 @@
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;

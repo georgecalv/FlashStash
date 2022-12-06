@@ -1,18 +1,10 @@
 import javax.swing.*;
-// import java.awt.BorderLayout;
-// import java.awt.Dimension;
 import java.awt.event.*;
-// import java.sql.Connection;
-// import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-// import java.sql.SQLException;
-import java.sql.Statement;
-// import java.util.Properties;
 import java.sql.PreparedStatement;
 import java.awt.*;
 import java.util.*;
-import javax.swing.text.Document;
 
 public class CreateSet extends FlashStash{
     JFrame frame;

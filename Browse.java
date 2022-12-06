@@ -1,19 +1,11 @@
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Properties;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.*;
 import java.awt.GridLayout;
-import java.awt.*;
-import javax.swing.table.DefaultTableModel;
 
 
 public class Browse extends FlashStash {
