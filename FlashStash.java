@@ -21,7 +21,7 @@ public class FlashStash {
     Connection cn;
     JPanel login;
 
-    // TODO: how everything looks(BRANCH), fix filter for saved browsing
+    // TODO: how everything looks(BRANCH), fix filter for saved browsing, comment
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
