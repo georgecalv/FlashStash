@@ -22,7 +22,7 @@ public class FlashStash {
     JPanel login;
 
     // TODO: admin stats object, filter search, how everything looks(BRANCH), 
-    // number of windows that open, fix not selecting set and hitting select button, like button
+    // fix not selecting set and hitting select button, like button
 
     public FlashStash() {
         this.frame = new JFrame("FlashStash");
@@ -115,7 +115,7 @@ public class FlashStash {
         input.setAlignmentX(SwingConstants.CENTER);
         login.revalidate();
         login.repaint();
-        
+
         // frame settings
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // this.frame.setLayout(new Boxlayout());
