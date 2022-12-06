@@ -349,6 +349,7 @@ public class Study extends FlashStash{
                 frame.repaint();
                 frame.revalidate();
                 b.Display();
+                flashFrame.dispose();
             }
         });
 
@@ -359,7 +360,7 @@ public class Study extends FlashStash{
         this.flashFrame.add(this.flashcard);
         this.flashFrame.add(this.options);
         this.flashFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.flashFrame.setSize(600,360);
+        this.flashFrame.setSize(650,360);
         this.flashFrame.setLocationRelativeTo(null);
         this.flashFrame.setResizable(false);
         this.flashFrame.setVisible(true);
