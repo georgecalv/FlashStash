@@ -93,7 +93,7 @@ public class CreateSet extends FlashStash{
                     // add selected things to arraylist
                     if(times == 0) {
                         set.add(name.getText());
-                        set.add(subjectCode.get(subjectDropBox.getSelectedIndex()));
+                        set.add(subjectCode.get(subjectDropBox.getSelectedIndex() - 1));
                     }
                     times += 1;
                     // text for question and then answer
